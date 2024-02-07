@@ -7,8 +7,8 @@ function Editprofile() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
   const [formdata, setFormdata] = useState({
-    avatar: "",
-    cover: "",
+    avatar: null,
+    cover: null,
     fullname: "",
     email: "",
     oldpassword: "",
@@ -28,32 +28,91 @@ function Editprofile() {
     }
   };
   const handleOnSubmit = async () => {
-    try {
-      console.log("submitted form with data:");
-      console.log(formdata);
-      // const response = await axios.post(
-      //   "http://localhost:3000/api/v1/users/register",
-      //   formdata
-      // );
-      // console.log(response.data.data)
-      // setUser({
-      //   fullname: response.data.data.fullname,
-      //   coverImage: response.data.data.coverImage,
-      //   email: response.data.data.email,
-      //   _id: response.data.data._id,
-      //   avatar: response.data.data.avatar,
-      //   username: response.data.data.username,
-      // });
-      // document.cookie = `accessToken=${response.data.data.accesstoken}; path=/; SameSite=;`;
-
-      // navigate("/");
-    } catch (error) {
-      console.log(error);
+    console.log(formdata);
+    if (document.cookie.length > 0) {
+      try {
+        const accesstoken = document.cookie
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+        if (formdata.avatar) {
+          console.log(formdata.avatar);
+          const response = await axios.patch(
+            "http://localhost:3000/api/v1/users/update-avatar",
+            { avatar: formdata.avatar },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `bearer ${accesstoken}`,
+              },
+            }
+          );
+          console.log(response.data);
+          setUser({ avatar: response.data.data.avatar });
+        }
+        if (formdata.cover) {
+          const response = await axios.patch(
+            "http://localhost:3000/api/v1/users/update-cover",
+            { cover: formdata.cover },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `bearer ${accesstoken}`,
+              },
+            }
+          );
+          console.log(response.data);
+          setUser({ coverImage: response.data.data.coverImage });
+        }
+        if (formdata.email && formdata.fullname) {
+          const response = await axios.patch(
+            "http://localhost:3000/api/v1/users/update-details",
+            {
+              fullName: formdata.fullname,
+              email: formdata.email,
+            },
+            {
+              headers: {
+                Authorization: `bearer ${accesstoken}`,
+              },
+            }
+          );
+          console.log(response.data);
+          setUser({
+            email: response.data.data.email,
+            fullname: response.data.data.fullname,
+          });
+        }
+        if (formdata.oldpassword && formdata.newpassword) {
+          const response = await axios.post(
+            "http://localhost:3000/api/v1/users/update-password",
+            {
+              oldpass: formdata.oldpassword,
+              newpass: formdata.newpassword,
+            },
+            {
+              headers: {
+                Authorization: `bearer ${accesstoken}`,
+              },
+            }
+          );
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   return (
     <div className="flex flex-col justify-center items-center ">
-      <div className="flex flex-row items-center mt-11">
+      <div className="text-white flex flex-col mt-2 justify-center  md:hidden items-center ">
+        <img
+          className=" w-72 md:w-96"
+          src="https://i.postimg.cc/pXjtdktL/Picsart-24-02-04-18-06-35-507.png"
+          alt=""
+        />
+      </div>
+      <div className="flex flex-row items-center md:mt-11">
         <div className="flex flex-col justify-center items-center bg-[#272727] p-2 w-[90vw] md:w-fit md:p-11 mx-3 rounded-lg">
           <div className=" m-1 flex flex-col w-full">
             <p className="text-white text-center text-xl md:text-2xl mb-11 font-bold ">
@@ -95,13 +154,14 @@ function Editprofile() {
                 id="avatar"
                 type="file"
                 className="hidden"
+                name="avatar"
                 onChange={handleChange}
               />
               <label
                 htmlFor="avatar"
                 className="cursor-pointer bg-[#363131] text-white py-2 px-4 w-full text-center rounded-lg border border-white inline-block"
               >
-                Choose Avatar
+                {formdata.avatar ? formdata.avatar.name : "Choose Avatar"}
               </label>
             </div>
             <label
@@ -113,6 +173,7 @@ function Editprofile() {
             <div className="relative mt-1">
               <input
                 id="cover"
+                name="cover"
                 type="file"
                 className="hidden"
                 onChange={handleChange}
@@ -121,7 +182,7 @@ function Editprofile() {
                 htmlFor="cover"
                 className="cursor-pointer bg-[#363131] text-white py-2 px-4 w-full text-center rounded-lg border border-white inline-block"
               >
-                Choose Cover Picture
+                {formdata.cover ? formdata.cover.name : "Choose Cover "}
               </label>
             </div>
           </div>
