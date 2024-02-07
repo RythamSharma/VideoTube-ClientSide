@@ -20,7 +20,7 @@ function Sidebar({ isSidebarOpen }) {
             },
           }
         );
-        console.log(response.data.data.channelsSubscribed);
+        // console.log(response.data.data.channelsSubscribed);
         setSubscriptions(response.data.data.channelsSubscribed);
         // console.log(subscriptions)
       
@@ -107,8 +107,8 @@ function Sidebar({ isSidebarOpen }) {
           )}
         </div>
         {isSidebarOpen && (
-          <div className="border-b border-gray-700 p-1 my-1 ">
-            <p className="font-semibold flex mb-2 items-center">
+          <div className="border-b border-gray-700 p-1 my-1">
+            <p className="font-semibold flex mb-2 items-center ">
               Subscriptions
               <img
                 className="ml-2 w-3"
@@ -120,7 +120,7 @@ function Sidebar({ isSidebarOpen }) {
             subscriptions.map((sub) => (
               <div
                 key={sub._id}
-                className="flex flex-row w-full p-2 items-center"
+                className="flex flex-row w-full px-2 py-1 my-1 items-center  cursor-pointer hover:bg-[#272727] rounded-xl "
               >
                 <img
                   className="w-9 rounded-full mr-2"

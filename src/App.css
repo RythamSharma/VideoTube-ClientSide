@@ -10,7 +10,7 @@ body{
   width: 1px; /* Set the width of the scrollbar */
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(164, 0, 0); /* Set the color of the scrollbar thumb */
+  background-color: #000; /* Set the color of the scrollbar thumb */
   border-radius: 6px; /* Optional: Add rounded corners to the scrollbar thumb */
 }
 

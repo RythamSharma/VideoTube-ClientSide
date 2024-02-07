@@ -227,19 +227,24 @@ function Navbar({ toggleSideBar }) {
               {user._id && <p>{user.email}</p>}
             </div>
           </div>
-          <p className="flex cursor-pointer p-3 hover:bg-[#2f2f2f] rounded-2xl" onClick={handleLogout}>
+          <Link to="/edit-profile">
+            <p className="flex cursor-pointer p-3 hover:bg-[#2f2f2f] rounded-2xl">
+              <img
+                className="w-5 h-auto mr-3"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABt0lEQVR4nO3ZPU7DQBCG4eW3IUhcAAqUQIA2h6ClQHTAHTgAVFAiTkJHhUAK5AzQUPFbUSBaeJGlsWQZJ3G8nt21tF8V2VlnnuxkEivGxMRMHGAWOAYegC/gHtg2TQowB1zyPz+NwgCHDM/AhB5gKvP4fAjk24QcYAG4BvYyx84KII8m1AAt4E4KfQLmR+zMkWkA4hloFzwnxSQDYMYEjnjJI3I7c5BMs2EXGuA+JyURbWmznTLvSCiITgEiabMkN9lpNhJi3E+nW3npd2Ajd74jOOTbfLHMRZ1CVBCuIWoIlxBVhCuIOsIFJIf4UEFoQwoQm2UQyIgOAmKDoEo9GpCqCKt66obYIIKBlECsjftg4xtSEvE6bjrhE1IXwiukToQ3SN0ILxANhHNIcpMD9GXpG9DNne/KceTmqaVZjw1kVZb9Ar26ED4gu+k6uedPf16sV2knn5DTDCTF9GwRPiBXOUjaZpXaySckmVJFsUI4hQArsuRTWugC2Ae2gOmJC7CsxwayBCwbpeCytTRDhEhMIKFqPRGiFOKOSEwgoWo9EaIU4o4EGlNhK9P/8UJKX6VvY4x+/gDtAFvi5WSVywAAAABJRU5ErkJggg=="
+              />
+              Edit Profile
+            </p>
+          </Link>
+          <p
+            className="flex cursor-pointer p-3 hover:bg-[#2f2f2f] rounded-2xl"
+            onClick={handleLogout}
+          >
             <img
               className="w-5 h-auto mr-3"
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNUlEQVR4nO3aO05DMRBGYUNBiwQtG0FZGG0aXjvJCmgQC6AIUNDR5rKNE01kikjJlSfRDf+MfHpL88nJfckFuACegV90GoBHm620Bjyh24MHYnrrtogEzOpMg2fRpiIW3rk6ZOLoOyIWfUfEAu5SXLUsYF4yQFx1yIQBC+AFuAz90wKWdaz3Zowo5Ab4qaMZ6iok5CCMKmQH5mMUowxxYdQhezDXJSKkCRMFsgPzuYWJBBnFRIPsxRwDAc6AL/6/5bGQ8/rHiw1J89OSugwTCMLYvSQKhAw3RFqet9QhtD7OK0PwvJOoQsjwYkWWV13gO8vHhzfgNfznoIPqkBNEho/YwNw1lzBk03QLThTeuTpk4ug7kmBHhrpmVvQO1aw8i+xclGr3HogdPDPM384otDKE5+DZGhon/IxufD43AAAAAElFTkSuQmCC"
             />
             Logout
-          </p>
-          <p className="flex cursor-pointer p-3 hover:bg-[#2f2f2f] rounded-2xl">
-            <img
-              className="w-5 h-auto mr-3"
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABt0lEQVR4nO3ZPU7DQBCG4eW3IUhcAAqUQIA2h6ClQHTAHTgAVFAiTkJHhUAK5AzQUPFbUSBaeJGlsWQZJ3G8nt21tF8V2VlnnuxkEivGxMRMHGAWOAYegC/gHtg2TQowB1zyPz+NwgCHDM/AhB5gKvP4fAjk24QcYAG4BvYyx84KII8m1AAt4E4KfQLmR+zMkWkA4hloFzwnxSQDYMYEjnjJI3I7c5BMs2EXGuA+JyURbWmznTLvSCiITgEiabMkN9lpNhJi3E+nW3npd2Ajd74jOOTbfLHMRZ1CVBCuIWoIlxBVhCuIOsIFJIf4UEFoQwoQm2UQyIgOAmKDoEo9GpCqCKt66obYIIKBlECsjftg4xtSEvE6bjrhE1IXwiukToQ3SN0ILxANhHNIcpMD9GXpG9DNne/KceTmqaVZjw1kVZb9Ar26ED4gu+k6uedPf16sV2knn5DTDCTF9GwRPiBXOUjaZpXaySckmVJFsUI4hQArsuRTWugC2Ae2gOmJC7CsxwayBCwbpeCytTRDhEhMIKFqPRGiFOKOSEwgoWo9EaIU4o4EGlNhK9P/8UJKX6VvY4x+/gDtAFvi5WSVywAAAABJRU5ErkJggg=="
-            />
-            Edit Profile
           </p>
         </div>
       )}

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './Pages/Login';
 import Signup from './Pages/Signup';
 import { RecoilRoot } from "recoil";
+import Editprofile from './Pages/Editprofile';
 function App() {
   return (
     <RecoilRoot>
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/" element={<React.Fragment><Dashboard/></React.Fragment>} />
         <Route exact path="/login" element={<React.Fragment><Login/></React.Fragment>} />
         <Route exact path="/signup" element={<React.Fragment><Signup/></React.Fragment>} />
+        <Route exact path="/edit-profile" element={<React.Fragment><Editprofile/></React.Fragment>} />
         </Routes>
       </Router>
     </>
