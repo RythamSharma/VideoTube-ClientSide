@@ -5,3 +5,16 @@
 body{
   background-color: black;
 }
+/* For WebKit (Chrome, Safari, and newer versions of Edge) */
+::-webkit-scrollbar {
+  width: 1px; /* Set the width of the scrollbar */
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(164, 0, 0); /* Set the color of the scrollbar thumb */
+  border-radius: 6px; /* Optional: Add rounded corners to the scrollbar thumb */
+}
+
+/* Optional: You can also style the scrollbar track (the area not covered by the thumb) */
+::-webkit-scrollbar-track {
+  background-color: #000000; /* Set the color of the scrollbar track */
+}

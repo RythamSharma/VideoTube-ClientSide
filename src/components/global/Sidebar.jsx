@@ -36,7 +36,7 @@ function Sidebar({ isSidebarOpen }) {
       <div
         className={`fixed text-white h-[100vh] ${
           isSidebarOpen ? "w-64" : "w-fit"
-        } hidden md:block  pt-16 border-gray-300 bg-black p-5`}
+        } hidden md:block  pt-16 border-gray-300 bg-black p-5 overflow-y-scroll`}
       >
         <div className="border-b border-gray-700 p-1 my-1 ">
           <p className="flex items-center p-3 cursor-pointer hover:bg-[#272727] rounded-xl ">
@@ -108,7 +108,7 @@ function Sidebar({ isSidebarOpen }) {
         </div>
         {isSidebarOpen && (
           <div className="border-b border-gray-700 p-1 my-1 ">
-            <p className="font-semibold flex items-center">
+            <p className="font-semibold flex mb-2 items-center">
               Subscriptions
               <img
                 className="ml-2 w-3"

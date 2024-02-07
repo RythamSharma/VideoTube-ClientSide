@@ -30,7 +30,8 @@ function Signup() {
         avatar: response.data.data.avatar,
         username: response.data.data.username,
       });
-      document.cookie = `accessToken=${response.data.data.accesstoken}; path=/;SameSite=None;`;
+      document.cookie = `accessToken=${response.data.data.accesstoken}; path=/; SameSite=;`;
+
       navigate('/')
     } catch (error) {
       console.log(error)

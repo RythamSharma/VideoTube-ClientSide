@@ -9,7 +9,7 @@ function VideosLayout({ isSidebarOpen }) {
   const [videos, setVideos] = useState();
 
   const fetchvideos = async () => {
-    if (document.cookie.length > 0) {
+    if (document.cookie.length > 0 && user?._id) {
       const accesstoken = document.cookie
         .split("; ")
         .find((row) => row.startsWith("accessToken="))
@@ -32,13 +32,13 @@ function VideosLayout({ isSidebarOpen }) {
 
   useEffect(() => {
     fetchvideos();
-  }, []);
+  }, [user]);
 
   return (
     <div
       className={`bg-black mt-11  ${
         isSidebarOpen ? "md:ml-64 justify-center" : "md:ml-28"
-      } md:mt-14 ml-0 w-full flex flex-wrap overflow-x-scroll`}
+      } md:mt-14 ml-0 w-full flex flex-wrap overflow-x-scroll `}
     >
       {videos?.map((video) => (
         <VideoCard

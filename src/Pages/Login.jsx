@@ -26,7 +26,8 @@ function Login() {
           'Content-Type': 'application/json',
         },
       });
-      document.cookie = `accessToken=${response.data.data.accesstoken}; path=/;SameSite=None;`;
+      document.cookie = `accessToken=${response.data.data.accesstoken}; path=/; SameSite=;`;
+
       setUser({
         fullname: response.data.data.loggedinuser.fullname,
         coverImage: response.data.data.loggedinuser.coverImage,
