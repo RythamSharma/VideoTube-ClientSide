@@ -5,9 +5,10 @@ import { userState } from "../store/atom";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
-function Login() {
+function Login({setProgress}) {
   let navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
+  const[err,setErr]=useState();
   const[formdata,setFormdata]=useState({
     username:"",
     password:""
@@ -21,11 +22,24 @@ function Login() {
   const handleOnSubmit = async () => {
     try {
       // console.log(formdata);
+      if(!formdata.username){
+        setErr("username is required")
+        return
+      }
+      if(!formdata.password){
+        setErr("password is required")
+        return
+      }
+
+      setProgress(10)
+
       const response = await axios.post("http://localhost:3000/api/v1/users/login", formdata, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
+      setProgress(60)
+
       document.cookie = `accessToken=${response.data.data.accesstoken}; path=/; SameSite=;`;
 
       setUser({
@@ -36,9 +50,12 @@ function Login() {
         avatar:response.data.data.loggedinuser.avatar,
         username:response.data.data.loggedinuser.username
       })
+      setProgress(100)
+
       navigate('/')
     } catch (error) {
-      console.log(error.response);
+      setProgress(100)
+      setErr(error.response.data);
     }
   };
   
@@ -67,6 +84,7 @@ function Login() {
           onChange={handleChange}
           className="bg-black mx-4 w-full md:w-[26vw] text-white focus:outline-none rounded-2xl p-3"
         />
+        {err && <div className="text-yellow-500" >{err}</div> }
         <button onClick={handleOnSubmit} className="rounded-xl bg-red-700 hover:bg-red-600 transition-all duration-300 p-3 mt-7 w-full md:w-[26vw] text-white">
           Log in
         </button>

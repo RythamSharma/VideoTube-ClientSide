@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../store/atom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 function Sidebar({ isSidebarOpen }) {
   const user = useRecoilValue(userState);
@@ -103,7 +104,23 @@ function Sidebar({ isSidebarOpen }) {
               </p>
             </div>
           ) : (
-            ""
+            <>
+            <div className="border-t border-gray-700 p-2 my-1" >
+            {isSidebarOpen &&  <p className="text-sm my-2" >Sign in to like videos, comment, and subscribe.</p>}
+              
+            <Link to="/login">
+                <button
+                  className={`bg-black border cursor-pointer border-gray-600 rounded-full p-2  text-[#00ADEE] flex items-center`}
+                >
+                  <img
+                    className="w-5 "
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAACUUlEQVR4nO1WS2sUQRD+NBhFMXpS9Cjmooh40LP4A9QoKN41Pm+aiyL+AAXJQcWTkICG2arNquAvMMbnol5EQdYgQXG3ahJX40FhpGt6cAO77GSZSSLkg4Khpx5fV3VXF7CE/w7DtR6wXgZLGaw/TEjHQXoOQdSdb/CCbAfpZ7BGzUXKKFU35xM80HUgqfhgj1EI9+LB5GqUqmtB4UGwvrN/JK/yyQTrxTiAvsWjaGVTggkJ1rM5EJCyd76/tU7Y50mOZ0+A9GdMoL6hzQF1BL4vDIHAypATAU5RgmJ4yBN4Mv+HcDRcD9L3nuSZ7AkM13oaruEYONyHoS9rbN3tPAlO8hK3oxXIrRGxTrRsRC44f9uEXFFyjUcvxcG07mXM0p7bzhctgqjLZF5A072WZtJ7YHnjU5/Uv+7X7oL0NIKprdkEDaJukPSD9HmL1+9PLM0OpD5DUU50/jBR7fCsE08SgnXECHF1t937BO7brbGc9DphA5kJ8zUnsF5rCPwaBTmGO5VVqe2drrOJy5Jk5GrKnUu/N/pl9YyiZegUV6Ll5sP5cj5dSdqC5ZMpF+QIsgLJUZ/NSgoCOmPKbtrJCq5lx1mdSUPgqU/XqcwIOF+pBxWy+c6l6zdIBq3/dwp3M0humC/LQNiX0lAu/DPytWMZAslAPHY5x9O9uP91I2hqi0mxtgdFPQCS83GzmnWF3WYG5sZ+VHeA9BZItPUY3kZIJ0FyHUFtGzpGEHWhEO6K27AMguQhWF6A5YMFYPlo4sZx+6c3wXIcrDvtGi5hseMvkKREAxA6BR0AAAAASUVORK5CYII="
+                  />
+                  <p className={`${isSidebarOpen? "md:block":"md:hidden"} hidden `}>Sign in</p>
+                </button>
+              </Link>
+              </div>
+            </>
           )}
         </div>
         {isSidebarOpen && (

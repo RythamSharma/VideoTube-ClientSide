@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Navbar from "../components/global/Navbar";
 import Sidebar from "../components/global/Sidebar";
 import VideosLayout from "../components/VideosLayout";
-const Profile = () => {
+const Profile = ({setProgress}) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [isSidebarOpen, setSideBar] = useState(true);
   const toggleSideBar = ()=>{
@@ -20,10 +20,10 @@ const Profile = () => {
 
   return (
     <div>
-      <Navbar toggleSideBar={toggleSideBar} />
+      <Navbar setProgress={setProgress} toggleSideBar={toggleSideBar} />
       <div className="flex flex-row " >
-      <Sidebar isSidebarOpen={isSidebarOpen} />
-      <VideosLayout isSidebarOpen={isSidebarOpen}/>
+      <Sidebar setProgress={setProgress} isSidebarOpen={isSidebarOpen} />
+      <VideosLayout setProgress={setProgress} isSidebarOpen={isSidebarOpen}/>
       </div>
     </div>
   );

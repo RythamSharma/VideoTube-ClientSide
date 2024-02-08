@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "../store/atom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-function Signup() {
+function Signup({setProgress}) {
   const navigate =useNavigate();
   const [user, setUser] = useRecoilState(userState);
   const [formdata, setFormdata] = useState({
@@ -20,8 +20,10 @@ function Signup() {
   };
   const handleOnSubmit = async () => {
     try {
+      setProgress(10)
       const response = await axios.post("http://localhost:3000/api/v1/users/register",formdata)
       // console.log(response.data.data)
+      setProgress(40)
       setUser({
         fullname: response.data.data.fullname,
         coverImage: response.data.data.coverImage,
@@ -30,8 +32,9 @@ function Signup() {
         avatar: response.data.data.avatar,
         username: response.data.data.username,
       });
+      setProgress(80)
       document.cookie = `accessToken=${response.data.data.accesstoken}; path=/; SameSite=;`;
-
+      setProgress(100)
       navigate('/')
     } catch (error) {
       console.log(error)

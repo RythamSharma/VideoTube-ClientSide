@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { User, useAuth0 } from "@auth0/auth0-react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Link } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import { userState } from "../../store/atom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-function Navbar({ toggleSideBar }) {
+function Navbar({ toggleSideBar, setProgress }) {
   let navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
   const handleLogout = async () => {
     try {
       if (document.cookie.length > 0) {
+        setProgress(60);
+        await new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, 1000);
+        });
+        setProgress(100);
         const accesstoken = document.cookie
           ?.split("; ")
           .find((row) => row.startsWith("accessToken="))
@@ -25,6 +31,7 @@ function Navbar({ toggleSideBar }) {
             },
           }
         );
+
         document.cookie =
           "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;";
         setUser({
@@ -35,6 +42,7 @@ function Navbar({ toggleSideBar }) {
           avatar: "",
           username: "",
         });
+
         navigate("/login");
       }
     } catch (error) {
@@ -48,6 +56,7 @@ function Navbar({ toggleSideBar }) {
           ?.split("; ")
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
+
         const response = await axios.get(
           "http://localhost:3000/api/v1/users/current-user",
           {
@@ -56,6 +65,7 @@ function Navbar({ toggleSideBar }) {
             },
           }
         );
+
         setUser({
           fullname: response.data.data.fullname,
           coverImage: response.data.data.coverImage,
