@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { userState } from "../store/atom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -167,7 +167,6 @@ function Editprofile({ setProgress }) {
   };
   return (
     <div className="flex flex-col justify-center items-center ">
-      {err && <div className="text-yellow-500 text-sm fixed top-1">{err}</div>}
       <div className="text-white flex flex-col mt-2 justify-center  md:hidden items-center ">
         <img
           className=" w-72 md:w-96 mt-3"
@@ -315,6 +314,7 @@ function Editprofile({ setProgress }) {
               />
             </div>
           </div>
+          {err && <div className=" text-yellow-500 text-sm absolute top-32 md:top-28">{err}</div>}
           <div className=" m- flex flex-col w-full">
             <button
               onClick={handleOnSubmit}

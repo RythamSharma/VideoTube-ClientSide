@@ -41,7 +41,7 @@ function Login({setProgress}) {
       setProgress(60)
 
       document.cookie = `accessToken=${response.data.data.accesstoken}; path=/; SameSite=;`;
-
+      
       setUser({
         fullname: response.data.data.loggedinuser.fullname,
         coverImage: response.data.data.loggedinuser.coverImage,

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import VideoCard from "../Helpers/VideoCard";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
 import { userState } from "../store/atom";
 
 function VideosLayout({ isSidebarOpen, setProgress }) {
   const user = useRecoilValue(userState);
-  const [videos, setVideos] = useState();
-
+  const [videos, setVideos] = useState([]);
+  const [page, setPage] = useState(1);
   const fetchvideos = async () => {
-    if (document.cookie.length > 0 && user?._id) {
+    if (document.cookie.length > 0) {
+      // console.log("fetching videos ##############3");
       setProgress(10);
       const accesstoken = document.cookie
         .split("; ")
@@ -19,7 +21,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
       try {
         setProgress(60);
         const response = await axios.get(
-          `http://localhost:3000/api/v1/videos/?userId=${user._id}`,
+          `http://localhost:3000/api/v1/videos/?page=${page}`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,
@@ -27,22 +29,27 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
           }
         );
         setProgress(100);
-        setVideos(response.data.data);
+        setVideos((prevVideos) => [...prevVideos, ...response.data.data]);
+        setPage((prevPage) => prevPage + 1);
       } catch (error) {
         console.log(error);
       }
     }
   };
-
   useEffect(() => {
     fetchvideos();
-  }, [user]);
+  }, []);
 
   return (
-    <div
+    <InfiniteScroll
       className={`bg-black mt-11  ${
-        isSidebarOpen ? "md:ml-64 justify-center" : "md:ml-28"
-      } md:mt-14 ml-0 w-full flex flex-wrap overflow-x-scroll `}
+        isSidebarOpen ? "md:pl-64 justify-items-end p-0" : "md:pl-24 p-0"
+      } md:mt-14 ml-0 w-full flex flex-wrap overflow-x-clip mb-10 md:mb-0`}
+      dataLength={videos.length}
+      next={fetchvideos}
+      hasMore={true}
+      loader={<h4>Loading...</h4>}
+      endMessage={<p>No more videos to load.</p>}
     >
       {videos ? (
         videos.map((video) => (
@@ -53,6 +60,8 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
             title={video.title}
             owner={video.owner}
             views={video.views}
+            username={video.ownerdetails.username}
+            avatar={video.ownerdetails.avatar}
             createdAt={video.createdAt}
           />
         ))
@@ -64,7 +73,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
           </div>
         </>
       )}
-    </div>
+    </InfiniteScroll>
   );
 }
 

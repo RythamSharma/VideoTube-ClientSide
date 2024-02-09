@@ -3,12 +3,12 @@ import { useRecoilValue } from "recoil";
 import { userState } from "../../store/atom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-function Sidebar({ isSidebarOpen }) {
+function Sidebar({ isSidebarOpen, setChoice }) {
   const user = useRecoilValue(userState);
   const [subscriptions, setSubscriptions] = useState([]);
   const fetchSubscriptions = async () => {
     if (document.cookie.length > 0 && user?._id) {
-    try {
+      try {
         const accesstoken = document.cookie
           ?.split("; ")
           .find((row) => row.startsWith("accessToken="))
@@ -24,10 +24,10 @@ function Sidebar({ isSidebarOpen }) {
         // console.log(response.data.data.channelsSubscribed);
         setSubscriptions(response.data.data.channelsSubscribed);
         // console.log(subscriptions)
-      
-    } catch (error) {
-      console.log(error);
-    }}
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
   useEffect(() => {
     fetchSubscriptions();
@@ -40,14 +40,24 @@ function Sidebar({ isSidebarOpen }) {
         } hidden md:block  pt-16 border-gray-300 bg-black p-5 overflow-y-scroll`}
       >
         <div className="border-b border-gray-700 p-1 my-1 ">
-          <p className="flex items-center p-3 cursor-pointer hover:bg-[#272727] rounded-xl ">
+          <p
+            className="flex items-center p-3 cursor-pointer hover:bg-[#272727] rounded-xl "
+            onClick={() => {
+              setChoice("home");
+            }}
+          >
             <img
               className={`w-6 ${isSidebarOpen ? "mr-4" : "mr-0"}`}
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACBElEQVR4nO3Yz4tNYRzH8WP8SGkUohRSJEWa2VjajTJloSwsFAv5C8gsLW0trSyt2MmQsrCQ2flRkliInd+RezFeOpwZT8/cO9177rnHmTzvunXrPM/n8/me832e8yPLEonEUMABPMbz/H+2lMBpfPOX7ziXNR2sxmXduYI1WRPBTjyIAt8rfiH5mB1Zk8Ak3kVBL2EVVuBCdOwjjjQh+LK8tzEbhGvhVIexx/ElGPezKGzkX4Vfi2vRmX2J/YvMGcOLaM51rKs7/G48iYLcwaYe5m7AzWjuM+yrK/wxfI5a4WLe631oLMf5qPW+4uQwg3dajJ9wdADNw3jfYfGvrDr8RtyOjJ5iTwXau4o7dshdbK4q/DheRQZXMVqJQfbbY7TQDMk9xwcVHov29x+YyrfPqsJHW/JU4THH29KLO+9DPArE3mCilFh/vhOF1xwPS62JfEcIRD5U0e99eO8t7tZznCgjEu7VZ4aSdBFwNvC/UUbgdSCwLasZbA8XdBmB8CZT+/MKRgL/2TIC8wwl4bAzSAUMjnQFCv6bK+DPq+UM2hbSLo4damQBOFi8G/TCZBMLmNE795tYQDuYsuAdF+uD460mFjBPnZpZnWapgH5IV6ADqYX6IbVQB1IL9UOXB7JeaNWp2RXcKmk2XadmV7C1+LTS61nLx01jS52aiUQiW9r8AhvTeS7acGUAAAAAAElFTkSuQmCC"
             />
             {isSidebarOpen && "Home"}
           </p>
-          <p className="flex items-center p-3 cursor-pointer hover:bg-[#272727] rounded-xl">
+          <p
+            className="flex items-center p-3 cursor-pointer hover:bg-[#272727] rounded-xl"
+            onClick={() => {
+              setChoice("subscriptions");
+            }}
+          >
             <img
               className={`w-5 ${isSidebarOpen ? "mr-4" : "mr-0"}`}
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAADwElEQVR4nO2ZS2xNQRzGp3rrLVFJPUMkiEQbCUsVEtQCkYiWpb1QioXYsOrCY2FDwgppSIhISCTCQoJIBAnqUe/EY+HZqldVfzL1nWRyes/rOrf3VvslJ/f0zH/OzO/MnG/+c2rMgAaUHwFd9DGZfgFi+rr4X0HoYzL9BsQUuYgB0vW/gPxWTCNQYopQwMLYIyKdBIaZIhJQC3xPMiJt+r0MjDFFIGCHfwGPAzIbeKnzx8CMAgKUAgfUl06gPgnIIGAicFN/vweqCwAxEjinPtgptUbXI0E6PZCwG/USxISgB5kEpNQ3tAedod3YCxBVYVM7JxCnbJMz9fZ7o5YHiMXAZ7VzDajIEhMJ8isIROV1jv2dBoanDLEO6ND9TwXZfxKQTEhj84B3irsOjE0BoATY5dhr6IinAqK46Zq7Vk+Bmf8AkQEOOe/g+hh1IkE64oAodjxwQ/EfgAU5QIwCzuse7cCKmPUiQX4qpizmDccBnxx7rksAMQW4q7pvgLkJ6qYHYi3R6cgP/VpX2xaj7hzgtercs1AmgVIDAZYBHxX7EJjls+fDQdMTqAFaFXcJGJ0EIi6I92QHmyxS6rLL6bC1yFEB9nwRmOaUDQd2OoZyJKidvILYJwecddxle7Y9i+z5rRN3B7jqZNS/BZTzfocEIEOypAwtTt5TE9FQhaaXdz9PV4LcDSgD1gJNsnbrYl9l700a7UxckO9+EJsoAl90/RYwNcGTs9OpGlgETAqJW6UOR+kZsDwRiBaqPc5qezTtHaNW9H1OR+8Bm4FKYIQOe94ANPup4oBMlqOgRXJDmgBOe3vVhnXLDUE5npOF1zuLdijIN8W80q99aefnCWKlA7EkS7l9kGcC7NuDWR4FgpxmYp4gypz9Ro/R5u+0tvoWUN+uWVbPuw0gBORArh6f4GuI906U5gCSAe4rpmdaJLsj7X1GlnZOqJ3NIR0NBFHMlu4IaAoDsR8eynWkDgU8Ujuz/gGkSjFPwkB6S93pDXAhJKZDeZ13nHS2AFbt2UBe+Sp9dPbP+QSxK35c3faBtJlCyZlalc61ct/h5WbjfddLfVPrYSFBjqsTDSExrYoZGlC+VeXHTKEErFYnmkO+2LQGgcgMHqi81hRKWhBfqCP1OYA0qKwl7rY8b7IfGhxX6rEtUIpyx79vAZaqjl3MV5piELDbgdkU8T0to5Hw8qxGUyxSGu9uFZq1YlfpA/pInW91UpIu/UctL59s08iEH8dYQ1qKZjpFTJ06a6daZ9q1M72va7UFf7EHZOLpD80syLzZFKcsAAAAAElFTkSuQmCC"
@@ -105,20 +115,30 @@ function Sidebar({ isSidebarOpen }) {
             </div>
           ) : (
             <>
-            <div className="border-t border-gray-700 p-2 my-1" >
-            {isSidebarOpen &&  <p className="text-sm my-2" >Sign in to like videos, comment, and subscribe.</p>}
-              
-            <Link to="/login">
-                <button
-                  className={`bg-black border cursor-pointer border-gray-600 rounded-full p-2  text-[#00ADEE] flex items-center`}
-                >
-                  <img
-                    className="w-5 "
-                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAACUUlEQVR4nO1WS2sUQRD+NBhFMXpS9Cjmooh40LP4A9QoKN41Pm+aiyL+AAXJQcWTkICG2arNquAvMMbnol5EQdYgQXG3ahJX40FhpGt6cAO77GSZSSLkg4Khpx5fV3VXF7CE/w7DtR6wXgZLGaw/TEjHQXoOQdSdb/CCbAfpZ7BGzUXKKFU35xM80HUgqfhgj1EI9+LB5GqUqmtB4UGwvrN/JK/yyQTrxTiAvsWjaGVTggkJ1rM5EJCyd76/tU7Y50mOZ0+A9GdMoL6hzQF1BL4vDIHAypATAU5RgmJ4yBN4Mv+HcDRcD9L3nuSZ7AkM13oaruEYONyHoS9rbN3tPAlO8hK3oxXIrRGxTrRsRC44f9uEXFFyjUcvxcG07mXM0p7bzhctgqjLZF5A072WZtJ7YHnjU5/Uv+7X7oL0NIKprdkEDaJukPSD9HmL1+9PLM0OpD5DUU50/jBR7fCsE08SgnXECHF1t937BO7brbGc9DphA5kJ8zUnsF5rCPwaBTmGO5VVqe2drrOJy5Jk5GrKnUu/N/pl9YyiZegUV6Ll5sP5cj5dSdqC5ZMpF+QIsgLJUZ/NSgoCOmPKbtrJCq5lx1mdSUPgqU/XqcwIOF+pBxWy+c6l6zdIBq3/dwp3M0humC/LQNiX0lAu/DPytWMZAslAPHY5x9O9uP91I2hqi0mxtgdFPQCS83GzmnWF3WYG5sZ+VHeA9BZItPUY3kZIJ0FyHUFtGzpGEHWhEO6K27AMguQhWF6A5YMFYPlo4sZx+6c3wXIcrDvtGi5hseMvkKREAxA6BR0AAAAASUVORK5CYII="
-                  />
-                  <p className={`${isSidebarOpen? "md:block":"md:hidden"} hidden `}>Sign in</p>
-                </button>
-              </Link>
+              <div className="border-t border-gray-700 p-2 my-1">
+                {isSidebarOpen && (
+                  <p className="text-sm my-2">
+                    Sign in to like videos, comment, and subscribe.
+                  </p>
+                )}
+
+                <Link to="/login">
+                  <button
+                    className={`bg-black border cursor-pointer border-gray-600 rounded-full p-2  text-[#00ADEE] flex items-center`}
+                  >
+                    <img
+                      className="w-5 "
+                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAACUUlEQVR4nO1WS2sUQRD+NBhFMXpS9Cjmooh40LP4A9QoKN41Pm+aiyL+AAXJQcWTkICG2arNquAvMMbnol5EQdYgQXG3ahJX40FhpGt6cAO77GSZSSLkg4Khpx5fV3VXF7CE/w7DtR6wXgZLGaw/TEjHQXoOQdSdb/CCbAfpZ7BGzUXKKFU35xM80HUgqfhgj1EI9+LB5GqUqmtB4UGwvrN/JK/yyQTrxTiAvsWjaGVTggkJ1rM5EJCyd76/tU7Y50mOZ0+A9GdMoL6hzQF1BL4vDIHAypATAU5RgmJ4yBN4Mv+HcDRcD9L3nuSZ7AkM13oaruEYONyHoS9rbN3tPAlO8hK3oxXIrRGxTrRsRC44f9uEXFFyjUcvxcG07mXM0p7bzhctgqjLZF5A072WZtJ7YHnjU5/Uv+7X7oL0NIKprdkEDaJukPSD9HmL1+9PLM0OpD5DUU50/jBR7fCsE08SgnXECHF1t937BO7brbGc9DphA5kJ8zUnsF5rCPwaBTmGO5VVqe2drrOJy5Jk5GrKnUu/N/pl9YyiZegUV6Ll5sP5cj5dSdqC5ZMpF+QIsgLJUZ/NSgoCOmPKbtrJCq5lx1mdSUPgqU/XqcwIOF+pBxWy+c6l6zdIBq3/dwp3M0humC/LQNiX0lAu/DPytWMZAslAPHY5x9O9uP91I2hqi0mxtgdFPQCS83GzmnWF3WYG5sZ+VHeA9BZItPUY3kZIJ0FyHUFtGzpGEHWhEO6K27AMguQhWF6A5YMFYPlo4sZx+6c3wXIcrDvtGi5hseMvkKREAxA6BR0AAAAASUVORK5CYII="
+                    />
+                    <p
+                      className={`${
+                        isSidebarOpen ? "md:block" : "md:hidden"
+                      } hidden `}
+                    >
+                      Sign in
+                    </p>
+                  </button>
+                </Link>
               </div>
             </>
           )}
@@ -132,22 +152,24 @@ function Sidebar({ isSidebarOpen }) {
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAj0lEQVR4nO3asQ0CMRAF0W2CE/TfCQkSEEFAOYMsLiNG+rvM6+BrLjjLrpL0E8AZuANbdQZc+Xi2HgMcgMc+5gWcqiscEwrLhMIyobBMKMukskwqy6SyTKppZbb9uLzcqqsRQ/j+tI7VjSNSWCKFJVJYIoUlUlgiBf4AhsASIZhQYlnH0inX05cRDwakP/EGHbXP3xCyjY8AAAAASUVORK5CYII="
               />
             </p>
-          
+
             {subscriptions &&
-            subscriptions.map((sub) => (
-              <div
-                key={sub._id}
-                className="flex flex-row w-full px-2 py-1 my-1 items-center  cursor-pointer hover:bg-[#272727] rounded-xl "
-              >
-                <img
-                  className="w-9 rounded-full mr-2"
-                  src={sub.channeldetails.avatar}
-                  alt="photo"
-                />
-                <p>{sub.channeldetails.username}</p>
-              </div>
-            ))
-            }
+              subscriptions.map((sub) => (
+                <div
+                  onClick={() => {
+                    setChoice(`channel ${sub.channeldetails._id}`);
+                  }}
+                  className="flex flex-row w-full px-2 py-1 my-1 items-center  cursor-pointer hover:bg-[#272727] rounded-xl "
+                  key={sub._id}
+                >
+                  <img
+                    className="w-9 rounded-full mr-2"
+                    src={sub.channeldetails.avatar}
+                    alt="photo"
+                  />
+                  <p>{sub.channeldetails.username}</p>
+                </div>
+              ))}
           </div>
         )}
       </div>

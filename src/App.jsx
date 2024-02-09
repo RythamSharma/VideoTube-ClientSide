@@ -8,6 +8,7 @@ import { RecoilRoot } from "recoil";
 import LoadingBar from 'react-top-loading-bar'
 import { useState } from 'react';
 import Editprofile from './Pages/Editprofile';
+import ChannelDashboard from './Pages/ChannelDashboard';
 function App() {
   const [progress, setProgress] = useState(0)
   return (
