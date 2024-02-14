@@ -44,6 +44,7 @@ function QueryVideoLayout({ setProgress, search, isSidebarOpen }) {
             description={video.description}
             title={video.title}
             owner={video.owner}
+            duration={video.duration}
             views={video.views}
             username={video.ownerdetails.username}
             avatar={video.ownerdetails.avatar}

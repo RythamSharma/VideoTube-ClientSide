@@ -12,7 +12,6 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
   const [page, setPage] = useState(1);
   const fetchvideos = async () => {
     if (document.cookie.length > 0) {
-      // console.log("fetching videos ##############",page);
       setProgress(10);
       const accesstoken = document.cookie
         .split("; ")
@@ -34,6 +33,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
         if (response.data.data.length < 9) {
           setHasmore(false);
         }
+      // console.log(response.data.data);
         setVideos((prevVideos) => [...prevVideos, ...response.data.data]);
       } catch (error) {
         console.log(error);
@@ -61,6 +61,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
             key={video._id}
             id={video._id}
             thumbnail={video.thumbnail}
+            duration={video.duration}
             title={video.title}
             owner={video.owner}
             views={video.views}

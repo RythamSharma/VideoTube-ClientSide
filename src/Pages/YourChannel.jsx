@@ -11,7 +11,7 @@ function YourChannel({ setProgress, isSidebarOpen }) {
         ?.split("; ")
         .find((row) => row.startsWith("accessToken="))
         .split("=")[1];
-      console.log("fetdcinhg ", accesstoken);
+      // console.log("fetdcinhg ", accesstoken);
       if (document.cookie.length > 0) {
         const response = await axios.get(
           "http://localhost:3000/api/v1/dashboard/you",
@@ -100,6 +100,7 @@ function YourChannel({ setProgress, isSidebarOpen }) {
                       id={video._id}
                       thumbnail={video.thumbnail}
                       title={video.title}
+                      duration={video.duration}
                       owner={video.owner}
                       views={video.views}
                       username={video.ownerdetails.username}

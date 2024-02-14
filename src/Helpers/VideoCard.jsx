@@ -9,13 +9,15 @@ function VideoCard(props) {
     return daysAgo;
   }
   const daysAgo = calculateDaysAgo(props.createdAt);
+  const durat = props.duration.toFixed(2);
   return (
     <div
       className=" m-1 text-white mt-4 mx-2 w-[358px] md:w-[410px] mb-3  cursor-pointer "
       id={props.id}
     >
-      <div className="w-full">
+      <div className="w-full relative">
         <img className="rounded-2xl " src={props.thumbnail} alt="" />
+        <div className="absolute bottom-1 right-1 bg-black px-1 font-semibold text-sm rounded-md" >{durat}</div>
       </div>
       <div>
         <div className="flex flex-row items-center mt-2 font-semibold">

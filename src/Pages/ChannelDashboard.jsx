@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import VideoCard from "../Helpers/VideoCard";
-import InfiniteScroll from "react-infinite-scroll-component";
 function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
   const [channeldetails, setChanneldetails] = useState();
   const [issub, setIssub] = useState(false);
@@ -70,6 +69,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
             },
           }
         );
+        // console.log(resp2.data.data);
         setProgress(100);
         setVideos(resp2.data.data);
       }
@@ -146,6 +146,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
                         id={video._id}
                         thumbnail={video.thumbnail}
                         title={video.title}
+                        duration={video.duration}
                         owner={video.owner}
                         views={video.views}
                         username={video.ownerdetails.username}
