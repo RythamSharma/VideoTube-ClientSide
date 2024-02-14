@@ -4,8 +4,10 @@ import Navbar from "../components/global/Navbar";
 import Sidebar from "../components/global/Sidebar";
 import VideosLayout from "../components/VideosLayout";
 import ChannelDashboard from "./ChannelDashboard";
+import YourChannel from "./YourChannel";
+import QueryVideoLayout from "../components/QueryVIdeoLayout";
 const Profile = ({ setProgress }) => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const [search, setSearch] = useState("");
   const [isSidebarOpen, setSideBar] = useState(true);
   const [choice, setChoice] = useState("home");
   const toggleSideBar = () => {
@@ -15,34 +17,42 @@ const Profile = ({ setProgress }) => {
       setSideBar(true);
     }
   };
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
 
   return (
     <div>
-      <Navbar setProgress={setProgress} toggleSideBar={toggleSideBar} />
+      <Navbar
+        setProgress={setProgress}
+        search={search}
+        setChoice={setChoice}
+        setSearch={setSearch}
+        toggleSideBar={toggleSideBar}
+      />
       <div className="flex flex-row ">
         <Sidebar
           setProgress={setProgress}
           setChoice={setChoice}
           isSidebarOpen={isSidebarOpen}
         />
-      {choice === "home" ? (
-        <VideosLayout
-          setProgress={setProgress}
-          isSidebarOpen={isSidebarOpen}
-        />
-      ) : (
-        choice.startsWith("channel") ? (
-          <ChannelDashboard choice={choice} channel={choice.substring(8)} isSidebarOpen={isSidebarOpen} setProgress={setProgress} />
-        ) : (
-          <div>
-            {/* Add your custom components or logic here */}
-          </div>
-        )
-      )}
-
+        {choice === "home" ? (
+          <VideosLayout
+            setProgress={setProgress}
+            isSidebarOpen={isSidebarOpen}
+          />
+        ) : choice.startsWith("channel") ? (
+          <ChannelDashboard
+            choice={choice}
+            channel={choice.substring(8)}
+            isSidebarOpen={isSidebarOpen}
+            setProgress={setProgress}
+          />
+        ) : choice === "you" ? (
+          <YourChannel
+            isSidebarOpen={isSidebarOpen}
+            setProgress={setProgress}
+          />
+        ) : choice==="search"? (
+          <QueryVideoLayout isSidebarOpen={isSidebarOpen} search={search} setProgress={setProgress}/>
+        ):(null)}
       </div>
     </div>
   );

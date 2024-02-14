@@ -7,11 +7,12 @@ import { userState } from "../store/atom";
 
 function VideosLayout({ isSidebarOpen, setProgress }) {
   const user = useRecoilValue(userState);
+  const [hasmore, setHasmore] = useState(true);
   const [videos, setVideos] = useState([]);
   const [page, setPage] = useState(1);
   const fetchvideos = async () => {
     if (document.cookie.length > 0) {
-      // console.log("fetching videos ##############3");
+      // console.log("fetching videos ##############",page);
       setProgress(10);
       const accesstoken = document.cookie
         .split("; ")
@@ -28,9 +29,12 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
             },
           }
         );
-        setProgress(100);
-        setVideos((prevVideos) => [...prevVideos, ...response.data.data]);
         setPage((prevPage) => prevPage + 1);
+        setProgress(100);
+        if (response.data.data.length < 9) {
+          setHasmore(false);
+        }
+        setVideos((prevVideos) => [...prevVideos, ...response.data.data]);
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +51,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
       } md:mt-14 ml-0 w-full flex flex-wrap overflow-x-clip mb-10 md:mb-0`}
       dataLength={videos.length}
       next={fetchvideos}
-      hasMore={true}
+      hasMore={hasmore}
       loader={<h4>Loading...</h4>}
       endMessage={<p>No more videos to load.</p>}
     >

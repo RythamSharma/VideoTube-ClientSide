@@ -9,6 +9,7 @@ import LoadingBar from 'react-top-loading-bar'
 import { useState } from 'react';
 import Editprofile from './Pages/Editprofile';
 import ChannelDashboard from './Pages/ChannelDashboard';
+import UploadVideo from './Pages/UploadVideo';
 function App() {
   const [progress, setProgress] = useState(0)
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route exact path="/login" element={<React.Fragment><Login setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/signup" element={<React.Fragment><Signup setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/edit-profile" element={<React.Fragment><Editprofile setProgress={setProgress}/></React.Fragment>} />
+        <Route exact path="/upload-video" element={<React.Fragment><UploadVideo setProgress={setProgress}/></React.Fragment>} />
         </Routes>
       </Router>
     </>

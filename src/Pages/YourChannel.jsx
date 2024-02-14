@@ -1,77 +1,28 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import VideoCard from "../Helpers/VideoCard";
-import InfiniteScroll from "react-infinite-scroll-component";
-function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
+import { Link } from "react-router-dom";
+function YourChannel({ setProgress, isSidebarOpen }) {
   const [channeldetails, setChanneldetails] = useState();
-  const [issub, setIssub] = useState(false);
   const [videos, setVideos] = useState([]);
-  const toggleSubscription = async ()=>{
-    const accesstoken = document.cookie
-    ?.split("; ")
-    .find((row) => row.startsWith("accessToken="))
-    .split("=")[1];
-    if(document.cookie.length>0){
-      const response = await axios.post(`http://localhost:3000/api/v1/subscriptions/c/${channel}`,{},{
-        headers:{
-          Authorization:`bearer ${accesstoken}`
-        }
-      })
-      setIssub(response.data.statusCode!==200)
-      // console.log(response.data)
-    }
-  }
   const fetchChannelDetails = async () => {
     try {
       const accesstoken = document.cookie
         ?.split("; ")
         .find((row) => row.startsWith("accessToken="))
         .split("=")[1];
-      setProgress(10);
+      console.log("fetdcinhg ", accesstoken);
       if (document.cookie.length > 0) {
         const response = await axios.get(
-          `http://localhost:3000/api/v1/dashboard/stats/${channel}`,
+          "http://localhost:3000/api/v1/dashboard/you",
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,
             },
           }
         );
-        const resp = await axios.get(
-          `http://localhost:3000/api/v1/subscriptions/b/${channel}`,
-          {
-            headers: {
-              Authorization: `bearer ${accesstoken}`,
-            },
-          }
-        );
-        setIssub(resp.data.data.IsSubscribed);
-        setProgress(70);
-        setChanneldetails(response.data.data[0]);
-        setProgress(100);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const fetchvideos = async () => {
-    setProgress(80);
-    try {
-      const accesstoken = document.cookie
-        ?.split("; ")
-        .find((row) => row.startsWith("accessToken="))
-        .split("=")[1];
-      if (document.cookie.length > 0) {
-        const resp2 = await axios.get(
-          `http://localhost:3000/api/v1/dashboard/videos/${channel}`,
-          {
-            headers: {
-              Authorization: `bearer ${accesstoken}`,
-            },
-          }
-        );
-        setProgress(100);
-        setVideos(resp2.data.data);
+        setChanneldetails(response.data.data.ChannelStatsAndDetails[0]);
+        setVideos(response.data.data.uploadedVideos);
       }
     } catch (error) {
       console.log(error);
@@ -79,8 +30,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
   };
   useEffect(() => {
     fetchChannelDetails();
-    fetchvideos();
-  }, [choice]);
+  }, []);
   return (
     <div
       className={` ${
@@ -119,14 +69,16 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
                     {" "}
                     Contact {channeldetails.email}
                   </div>
-                  <button
-                  onClick={toggleSubscription}
-                    className={`${
-                      issub ? "bg-[#272727]" : "bg-red-600"
-                    } my-3 rounded-full p-2`}
-                  >
-                    {issub ? "Subscribed" : "Subscribe"}
-                  </button>
+                  <div>
+                    <Link to='/upload-video' >
+                    <button className={"bg-[#272727] my-3 px-7 rounded-full p-2"}>
+                      Upload Video
+                    </button>
+                    </Link>
+                    <button className={"bg-[#272727] md:my-3 px-6 md:ml-2 rounded-full p-2"}>
+                      Manage Videos
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,24 +90,26 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
               />{" "}
             </h1>
             {videos.length > 0 ? (
-              <div className={`bg-black mt-1  ml-0 w-full flex flex-wrap overflow-x-clip mb-14 md:mb-0`}>
-                  {videos.length > 0 ? (
-                    videos.map((video) => (
-                      <VideoCard
-                        key={video._id}
-                        id={video._id}
-                        thumbnail={video.thumbnail}
-                        title={video.title}
-                        owner={video.owner}
-                        views={video.views}
-                        username={video.ownerdetails.username}
-                        avatar={video.ownerdetails.avatar}
-                        createdAt={video.createdAt}
-                      />
-                    ))
-                  ) : (
-                    <></>
-                  )}
+              <div
+                className={`bg-black mt-1  ml-0 w-full flex flex-wrap overflow-x-clip mb-14 md:mb-0`}
+              >
+                {videos.length > 0 ? (
+                  videos.map((video) => (
+                    <VideoCard
+                      key={video._id}
+                      id={video._id}
+                      thumbnail={video.thumbnail}
+                      title={video.title}
+                      owner={video.owner}
+                      views={video.views}
+                      username={video.ownerdetails.username}
+                      avatar={video.ownerdetails.avatar}
+                      createdAt={video.createdAt}
+                    />
+                  ))
+                ) : (
+                  <></>
+                )}
               </div>
             ) : (
               <div className="text-white font-bold  items-center text-xs mt-20 ml-5 md:ml-[23vw] flex md:text-xl">
@@ -172,4 +126,4 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
   );
 }
 
-export default ChannelDashboard;
+export default YourChannel;
