@@ -5,18 +5,21 @@ import BottomNav from "./BottomNav";
 import { userState } from "../../store/atom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-function Navbar({ toggleSideBar, setProgress, setChoice, setSearch }) {
+function Navbar({ toggleSideBar,search, setProgress, setChoice, setSearch }) {
   const handleOnChange = async (e) => {
-    setSearch(e.target.value)
-  }
+    setSearch(e.target.value);
+  };
+  const clearSearchQuery =  () => {
+    setSearch("");
+  };
   const handleInputKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSearchButtonClick();
     }
   };
   const handleSearchButtonClick = async (e) => {
-    setChoice('search')
-  }
+    setChoice("search");
+  };
   let navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
   const handleLogout = async () => {
@@ -43,8 +46,10 @@ function Navbar({ toggleSideBar, setProgress, setChoice, setSearch }) {
           }
         );
 
-        document.cookie ="accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;";
-        document.cookie ="id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;";
+        document.cookie =
+          "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;";
+        document.cookie =
+          "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;";
         setUser({
           fullname: "",
           coverImage: "",
@@ -142,39 +147,43 @@ function Navbar({ toggleSideBar, setProgress, setChoice, setSearch }) {
                     placeholder="Search"
                     className="bg-black  w-[63vw] text-white focus:outline-none rounded-l-full "
                   />
-                  <button className="rounded-r-full "
-                  onClick={handleSearchButtonClick}
+                  <button
+                    className="rounded-r-full "
+                    onClick={handleSearchButtonClick}
                   >
                     <img
                       className="w-5"
                       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABcklEQVR4nO2WwUpCQRiFL5lusnYJvYL1Dtm6FhnlK4hhaT1F+BpmPUoQbbIgJW3fWhe1+uK3c2FWysxcJMgDAxfunP8bZv575ibJSn9FQAGoAXfAAJhq2HNP7wpZQ0+AMYs1AqpZANeAjlP4GbgEysCGxi7QAvrOvBvzxoA7KvQF1OcV0yIbmjuDx2wvKrTv4as48OOQRhrLXA9Y9Lm870Dex1hzztT7rIAc8KIapz7Ge5kufKFOjbZq3PqYhjKVI8DW7aaBj2kiUzECvKkak2WDt0LAwwy2ei/tbB9TT6ZWBPhaNbohn1M/4nN6VY0z3wAZydgIADfltRBa9zVXZbb4q3j4DoBveY98Fz2TbpkUbjGYS+Zvb9OBfgKlJET83jgpHMVgW+FQ1LDuvXLONIWm88PgJrtlFPiL9AEcGszJ6mh43gLfshd4U8hMtaCuda/bSJnCfQVsO38mttid5L/AS862Py4N7MCfgIelgldKpB/hgvXNldcwtQAAAABJRU5ErkJggg=="
-                      />
+                    />
                   </button>
                 </div>
                 <div className="bg-[#272727] p-3 ml-2 cursor-pointer rounded-full">
                   <img
                     className="w-4"
                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABC0lEQVR4nO2VwUoCURiFL65N3Rtkoa0jwRYuogerXiN6gxiM9hX4EIL4CpaS0wN8cesIP8n8XuPu8odBOJz/fHpmvBNCwgCHQAGUukZAL2U3NXzB5kStnQNQUD0POQClA/jIAXBnDwh+QfuKQuaKgE/tHRhtlfI/ABrSSg8wk+nMaCMHUBjfubSpB7iX6dpop8B7xVnUNb5b6Xce4EqmefzJRm/Hc0d1rXQ+2fCW+RKXlQCZxzLGamqu+cdfA5608xoSFjrAUguPQNPxtkx4rOxoK0CLF+Yd8Abc6CbW4xMG9NX5upb4OUgKN5AT4IXt8wwc7xT+CzTU0zUxoRNpwz8HV8C+J2to+PeAL9ZY/qvCumfbAAAAAElFTkSuQmCC"
-                    />
+                  />
                 </div>
               </>
             ) : (
               ""
-              )}
+            )}
           </div>
           <div className="flex items-center">
             <div className=" border hidden md:flex border-gray-700 rounded-full ">
               <input
                 type="text"
                 name="search"
+                value={search}
                 placeholder="Search"
                 onChange={handleOnChange}
                 onKeyDown={handleInputKeyDown}
                 className="bg-black  w-[34vw] text-white focus:outline-none rounded-l-full py-1 px-2"
-                />
-              <button className="px-2 py-1 rounded-r-full bg-[#272727]"
+              />
+              {/* <button onClick={clearSearchQuery} className={`w-6 mx-1 ${search?"block":"hidden"}`} ><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABBUlEQVR4nO3ZTQqDMBCGYU/RSq9Yj1uwPc1bRBcirWicv4T5Vm6UeVCTGdJ1mUwm00yAJ9AHqKOfaim9eWDO6IlhRkw1TBlKHnADXssDPsBDpdL9Gu6rGt7FNXhikEJ4YpBGeGDQQlhi0EZYYMwQmhhzhAbGDSGJcUdIYMIgrmDCIUowYRFnMOERRzDVIPYw1SH+zBDj5tp9ULvyZup6E+tsPiezEUA0TXxa/PixI4zNp7K3OlWD4cASGx7DiX0iLIaCzS4chgs7dhgMAm2HOwbB3skNg0IDaI5BsYs1w2DQiqONsZwn0MJ4DEVIYzwnO6QwEcZTJDDNHL01cxiayWQyXcR8AfkY5euVO0c7AAAAAElFTkSuQmCC"/></button> */}
+              <button
+                className="px-2 py-1 rounded-r-full bg-[#272727]"
                 onClick={handleSearchButtonClick}
-                >
+              >
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABcklEQVR4nO2WwUpCQRiFL5lusnYJvYL1Dtm6FhnlK4hhaT1F+BpmPUoQbbIgJW3fWhe1+uK3c2FWysxcJMgDAxfunP8bZv575ibJSn9FQAGoAXfAAJhq2HNP7wpZQ0+AMYs1AqpZANeAjlP4GbgEysCGxi7QAvrOvBvzxoA7KvQF1OcV0yIbmjuDx2wvKrTv4as48OOQRhrLXA9Y9Lm870Dex1hzztT7rIAc8KIapz7Ge5kufKFOjbZq3PqYhjKVI8DW7aaBj2kiUzECvKkak2WDt0LAwwy2ei/tbB9TT6ZWBPhaNbohn1M/4nN6VY0z3wAZydgIADfltRBa9zVXZbb4q3j4DoBveY98Fz2TbpkUbjGYS+Zvb9OBfgKlJET83jgpHMVgW+FQ1LDuvXLONIWm88PgJrtlFPiL9AEcGszJ6mh43gLfshd4U8hMtaCuda/bSJnCfQVsO38mttid5L/AS862Py4N7MCfgIelgldKpB/hgvXNldcwtQAAAABJRU5ErkJggg==" />
               </button>
             </div>
@@ -277,7 +286,7 @@ function Navbar({ toggleSideBar, setProgress, setChoice, setSearch }) {
         </div>
       )}
       <div className="block md:hidden">
-        <BottomNav setChoice={setChoice}/>
+        <BottomNav setChoice={setChoice} />
       </div>
     </>
   );

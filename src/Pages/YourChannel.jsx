@@ -75,9 +75,11 @@ function YourChannel({ setProgress, isSidebarOpen }) {
                       Upload Video
                     </button>
                     </Link>
+                    <Link to="/manage-videos" >
                     <button className={"bg-[#272727] md:my-3 px-6 md:ml-2 rounded-full p-2"}>
                       Manage Videos
                     </button>
+                    </Link>
                   </div>
                 </div>
               </div>

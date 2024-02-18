@@ -10,6 +10,7 @@ import { useState } from 'react';
 import Editprofile from './Pages/Editprofile';
 import ChannelDashboard from './Pages/ChannelDashboard';
 import UploadVideo from './Pages/UploadVideo';
+import ManageVideos from './Pages/ManageVideos';
 function App() {
   const [progress, setProgress] = useState(0)
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route exact path="/signup" element={<React.Fragment><Signup setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/edit-profile" element={<React.Fragment><Editprofile setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/upload-video" element={<React.Fragment><UploadVideo setProgress={setProgress}/></React.Fragment>} />
+        <Route exact path="/manage-videos" element={<React.Fragment><ManageVideos setProgress={setProgress}/></React.Fragment>} />
         </Routes>
       </Router>
     </>
