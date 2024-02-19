@@ -4,6 +4,7 @@ import ManageVideoCard from "../Helpers/ManageVideoCard";
 
 function ManageVideos() {
   const [videos, setVideos] = useState([]);
+  const[response,setResponse]=useState(null);
   const getVideos = async () => {
     try {
       const accesstoken = document.cookie
@@ -34,10 +35,12 @@ function ManageVideos() {
       <h1 className="font-bold text-lg md:text-3xl text-white mt-4">
         Manage your <span className="text-red-700">Videotube</span> Videos here
       </h1>
+      <h1 className="font-bold text-lg md:text-xl text-white mt-4" >{response}</h1>
       {videos.length > 0
         ? videos.map((video) => (
             <div key={video._id}>
               <ManageVideoCard
+                setResponse={setResponse}
                 id={video._id}
                 description={video.description}
                 title={video.title}

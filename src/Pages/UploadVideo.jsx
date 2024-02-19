@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-function UploadVideo() {
+function UploadVideo({setProgress}) {
   const [err, setErr] = useState();
-  const handleOnSubmit = async (setProgress) => {
+  const handleOnSubmit = async () => {
     try {
       if (document.cookie.length > 0) {
         setProgress(10);
