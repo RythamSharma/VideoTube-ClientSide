@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 function VideoCardsecond(props) {
   function calculateDaysAgo(createdAt) {
     const currentDate = new Date();
@@ -10,8 +11,17 @@ function VideoCardsecond(props) {
   }
   const durat = props.duration.toFixed(2);
   const daysAgo = calculateDaysAgo(props.createdAt);
+  const navigate =useNavigate();
+  const handleVideoStream = () => {
+    // Extract the video id from props
+    const videoId = props.id;
+
+    // Navigate to /video-stream with the video id as a parameter
+    navigate(`/video-stream/${videoId}`);
+  };
   return (
     <div
+      onClick={handleVideoStream}
       className=" m-1 text-white mt-1 mx-2 w-[358px] md:w-full  mb-3 md:flex md:flex-row cursor-pointer "
       id={props.id}
     >

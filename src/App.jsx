@@ -11,6 +11,7 @@ import Editprofile from './Pages/Editprofile';
 import ChannelDashboard from './Pages/ChannelDashboard';
 import UploadVideo from './Pages/UploadVideo';
 import ManageVideos from './Pages/ManageVideos';
+import StreamVideo from './Pages/StreamVideo';
 function App() {
   const [progress, setProgress] = useState(0)
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route exact path="/edit-profile" element={<React.Fragment><Editprofile setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/upload-video" element={<React.Fragment><UploadVideo setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/manage-videos" element={<React.Fragment><ManageVideos setProgress={setProgress}/></React.Fragment>} />
+        <Route exact path="/video-stream/:videoId" element={<React.Fragment><StreamVideo setProgress={setProgress}/></React.Fragment>} />
         </Routes>
       </Router>
     </>

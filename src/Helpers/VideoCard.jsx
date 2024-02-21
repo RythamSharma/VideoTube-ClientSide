@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 function VideoCard(props) {
   function calculateDaysAgo(createdAt) {
     const currentDate = new Date();
@@ -8,9 +9,18 @@ function VideoCard(props) {
     return daysAgo;
   }
   const daysAgo = calculateDaysAgo(props.createdAt);
-  const durat = props.duration.toFixed(2);
+  const durat = (props.duration/60).toFixed(2);
+  const navigate =useNavigate();
+  const handleVideoStream = () => {
+    // Extract the video id from props
+    const videoId = props.id;
+
+    // Navigate to /video-stream with the video id as a parameter
+    navigate(`/video-stream/${videoId}`);
+  };
   return (
     <div
+      onClick={handleVideoStream}
       className=" m-1 text-white mt-4 mx-2 w-[358px] md:w-[410px] mb-3  cursor-pointer "
       id={props.id}
     >
