@@ -31,7 +31,7 @@ function App() {
         <Route exact path="/edit-profile" element={<React.Fragment><Editprofile setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/upload-video" element={<React.Fragment><UploadVideo setProgress={setProgress}/></React.Fragment>} />
         <Route exact path="/manage-videos" element={<React.Fragment><ManageVideos setProgress={setProgress}/></React.Fragment>} />
-        <Route exact path="/video-stream/:videoId" element={<React.Fragment><StreamVideo setProgress={setProgress}/></React.Fragment>} />
+        <Route exact path="/video-stream/:videoId/:ownerId" element={<React.Fragment><StreamVideo setProgress={setProgress}/></React.Fragment>} />
         </Routes>
       </Router>
     </>

@@ -7,10 +7,12 @@ function QueryVideoLayout({ setProgress, search, isSidebarOpen }) {
   const fetchVIdeoBasedOnQuery = async () => {
     try {
       if (document.cookie.length > 0) {
+        setProgress(30)
         const accesstoken = document.cookie
-          ?.split("; ")
-          .find((row) => row.startsWith("accessToken="))
-          .split("=")[1];
+        ?.split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        .split("=")[1];
+        setProgress(60)
         const response = await axios.get(
           `http://localhost:3000/api/v1/videos/?query=${search}`,
           {
@@ -18,11 +20,14 @@ function QueryVideoLayout({ setProgress, search, isSidebarOpen }) {
               Authorization: `bearer ${accesstoken}`,
             },
           }
-        );
-        setVideos(response.data.data);
-        console.log(response.data.data);
-      }
-    } catch (error) {
+          );
+          setProgress(80)
+          setVideos(response.data.data);
+          // console.log(response.data.data);
+          setProgress(100)
+        }
+      } catch (error) {
+      setProgress(100)
       console.log(error);
     }
   };
@@ -39,6 +44,7 @@ function QueryVideoLayout({ setProgress, search, isSidebarOpen }) {
         videos.map((video) => (
           <VideoCardsecond
             key={video._id}
+            size={400}
             id={video._id}
             thumbnail={video.thumbnail}
             description={video.description}

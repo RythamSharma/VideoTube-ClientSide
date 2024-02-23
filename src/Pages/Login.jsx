@@ -68,21 +68,21 @@ function Login({setProgress}) {
           alt=""
         />
       </div>
-      <div className="flex flex-col justify-center items-center bg-[#272727] p-11 rounded-lg">
+      <div className="flex flex-col justify-center items-center bg-[#181818] p-11 rounded-2xl">
         <p className="text-white font-bold" >Hi, Welcome Back to <span className="text-red-700" >VideoTube!</span> </p>
         <input
           type="text"
           placeholder="Username"
           name="username"
           onChange={handleChange}
-          className="bg-black m-4 w-full md:w-[26vw] text-white focus:outline-none rounded-2xl p-3"
+          className="bg-black m-4 w-full md:w-[26vw] text-white focus:outline-none rounded-xl p-3"
           />
         <input
           type="password"
           placeholder="Password"
           name="password"
           onChange={handleChange}
-          className="bg-black mx-4 w-full md:w-[26vw] text-white focus:outline-none rounded-2xl p-3"
+          className="bg-black mx-4 w-full md:w-[26vw] text-white focus:outline-none rounded-xl p-3"
         />
         {err && <div className="text-yellow-500" >{err}</div> }
         <button onClick={handleOnSubmit} className="rounded-xl bg-red-700 hover:bg-red-600 transition-all duration-300 p-3 mt-7 w-full md:w-[26vw] text-white">

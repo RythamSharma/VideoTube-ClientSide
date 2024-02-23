@@ -6,6 +6,7 @@ import { userState } from "../../store/atom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 function Navbar({ toggleSideBar,search, setProgress, setChoice, setSearch }) {
+  const navigate = useNavigate();
   const handleOnChange = async (e) => {
     setSearch(e.target.value);
   };
@@ -20,7 +21,6 @@ function Navbar({ toggleSideBar,search, setProgress, setChoice, setSearch }) {
   const handleSearchButtonClick = async (e) => {
     setChoice("search");
   };
-  let navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
   const handleLogout = async () => {
     try {

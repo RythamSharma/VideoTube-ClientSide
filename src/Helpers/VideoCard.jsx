@@ -12,16 +12,14 @@ function VideoCard(props) {
   const durat = (props.duration/60).toFixed(2);
   const navigate =useNavigate();
   const handleVideoStream = () => {
-    // Extract the video id from props
     const videoId = props.id;
-
-    // Navigate to /video-stream with the video id as a parameter
-    navigate(`/video-stream/${videoId}`);
+    const ownerId = props.owner;
+    navigate(`/video-stream/${videoId}/${ownerId}`);
   };
   return (
     <div
       onClick={handleVideoStream}
-      className=" m-1 text-white mt-4 mx-2 w-[358px] md:w-[410px] mb-3  cursor-pointer "
+      className={` m-1 text-white mt-4 mx-2 w-[358px] md:w-[410px] mb-3  cursor-pointer `}
       id={props.id}
     >
       <div className="w-full relative">

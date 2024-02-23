@@ -13,19 +13,17 @@ function VideoCardsecond(props) {
   const daysAgo = calculateDaysAgo(props.createdAt);
   const navigate =useNavigate();
   const handleVideoStream = () => {
-    // Extract the video id from props
     const videoId = props.id;
-
-    // Navigate to /video-stream with the video id as a parameter
-    navigate(`/video-stream/${videoId}`);
+    const ownerId = props.owner;
+    navigate(`/video-stream/${videoId}/${ownerId}`);
   };
   return (
     <div
       onClick={handleVideoStream}
-      className=" m-1 text-white mt-1 mx-2 w-[358px] md:w-full  mb-3 md:flex md:flex-row cursor-pointer "
+      className=" m-1 text-white mt-1 mx-2  mb-3 md:flex md:flex-row cursor-pointer "
       id={props.id}
     >
-      <div className="w-full md:w-[400px] relative">
+      <div className={`w-full md:w-[${props.size}px] relative`}>
         <img className="rounded-2xl " src={props.thumbnail} alt="" />
         <div className="absolute bottom-1 right-1 bg-black px-1 font-semibold text-sm rounded-md">
           {durat}
@@ -45,7 +43,7 @@ function VideoCardsecond(props) {
               <p className="channel ml-1 text-xs">{props.username}</p>
               </div>
             </div>
-            <p className="ml-1 text-xs hidden md:block text-gray-400 my-3">
+            <p className="ml-1 text-xs hidden md:block w-[50vw] text-gray-400 my-3">
               {props.description}
             </p>
           </div>
