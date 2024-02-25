@@ -20,7 +20,7 @@ function VideoCardsecond(props) {
   return (
     <div
       onClick={handleVideoStream}
-      className=" m-1 text-white mt-1 mx-2  mb-3 md:flex md:flex-row cursor-pointer "
+      className=" m-1 text-white mt-1 mx-2 mb-3 md:flex md:flex-row cursor-pointer "
       id={props.id}
     >
       <div className={`w-full md:w-[${props.size}px] relative`}>
