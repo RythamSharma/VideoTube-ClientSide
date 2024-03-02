@@ -19,7 +19,7 @@ function CommentCard(props) {
   const getuser = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/users/getuser",
+        "https://videotube-api.onrender.com/api/v1/users/getuser",
         {
           userid: props.owner,
         }

@@ -21,7 +21,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
       try {
         setProgress(60);
         const response = await axios.get(
-          `http://localhost:3000/api/v1/videos/?page=${page}`,
+          `https://videotube-api.onrender.com/api/v1/videos/?page=${page}`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,

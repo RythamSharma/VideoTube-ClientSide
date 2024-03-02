@@ -14,7 +14,7 @@ function QueryVideoLayout({ setProgress, search, isSidebarOpen }) {
         .split("=")[1];
         setProgress(60)
         const response = await axios.get(
-          `http://localhost:3000/api/v1/videos/?query=${search}`,
+          `https://videotube-api.onrender.com/api/v1/videos/?query=${search}`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,

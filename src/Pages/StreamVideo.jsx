@@ -32,7 +32,7 @@ function StreamVideo(props) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.post(
-          `http://localhost:3000/api/v1/comments/${videoId}`,
+          `https://videotube-api.onrender.com/api/v1/comments/${videoId}`,
           { content: content },
           {
             headers: {
@@ -56,7 +56,7 @@ function StreamVideo(props) {
           .split("=")[1];
 
         const response = await axios.get(
-          "http://localhost:3000/api/v1/users/current-user",
+          "https://videotube-api.onrender.com/api/v1/users/current-user",
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,
@@ -85,7 +85,7 @@ function StreamVideo(props) {
       .split("=")[1];
     if (document.cookie.length > 0) {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/subscriptions/c/${ownerdetails._id}`,
+        `https://videotube-api.onrender.com/api/v1/subscriptions/c/${ownerdetails._id}`,
         {},
         {
           headers: {
@@ -105,7 +105,7 @@ function StreamVideo(props) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.get(
-          `http://localhost:3000/api/v1/comments/${videoId}`,
+          `https://videotube-api.onrender.com/api/v1/comments/${videoId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -128,7 +128,7 @@ function StreamVideo(props) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.get(
-          `http://localhost:3000/api/v1/videos/`,
+          `https://videotube-api.onrender.com/api/v1/videos/`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,
@@ -150,7 +150,7 @@ function StreamVideo(props) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.get(
-          `http://localhost:3000/api/v1/dashboard/stats/${ownerId}`,
+          `https://videotube-api.onrender.com/api/v1/dashboard/stats/${ownerId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -173,7 +173,7 @@ function StreamVideo(props) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.post(
-          `http://localhost:3000/api/v1/videos/viewvideo/`,
+          `https://videotube-api.onrender.com/api/v1/videos/viewvideo/`,
           { videoId: videoId },
           {
             headers: {
@@ -196,7 +196,7 @@ function StreamVideo(props) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.get(
-          `http://localhost:3000/api/v1/videos/${videoId}`,
+          `https://videotube-api.onrender.com/api/v1/videos/${videoId}`,
           {
             headers: {
               "Content-Type": "application/json",

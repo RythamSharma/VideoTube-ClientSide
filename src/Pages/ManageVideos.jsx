@@ -13,7 +13,7 @@ function ManageVideos({setProgress}) {
         .split("=")[1];
       if (document.cookie.length > 0) {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/videos/owner/videos",
+          "https://videotube-api.onrender.com/api/v1/videos/owner/videos",
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,

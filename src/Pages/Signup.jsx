@@ -21,7 +21,7 @@ function Signup({setProgress}) {
   const handleOnSubmit = async () => {
     try {
       setProgress(10)
-      const response = await axios.post("http://localhost:3000/api/v1/users/register",formdata)
+      const response = await axios.post("https://videotube-api.onrender.com/api/v1/users/register",formdata)
       // console.log(response.data.data)
       setProgress(40)
       setUser({

@@ -11,7 +11,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
     .find((row) => row.startsWith("accessToken="))
     .split("=")[1];
     if(document.cookie.length>0){
-      const response = await axios.post(`http://localhost:3000/api/v1/subscriptions/c/${channel}`,{},{
+      const response = await axios.post(`https://videotube-api.onrender.com/api/v1/subscriptions/c/${channel}`,{},{
         headers:{
           Authorization:`bearer ${accesstoken}`
         }
@@ -29,7 +29,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
       setProgress(10);
       if (document.cookie.length > 0) {
         const response = await axios.get(
-          `http://localhost:3000/api/v1/dashboard/stats/${channel}`,
+          `https://videotube-api.onrender.com/api/v1/dashboard/stats/${channel}`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,
@@ -37,7 +37,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
           }
         );
         const resp = await axios.get(
-          `http://localhost:3000/api/v1/subscriptions/b/${channel}`,
+          `https://videotube-api.onrender.com/api/v1/subscriptions/b/${channel}`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,
@@ -62,7 +62,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
         .split("=")[1];
       if (document.cookie.length > 0) {
         const resp2 = await axios.get(
-          `http://localhost:3000/api/v1/dashboard/videos/${channel}`,
+          `https://videotube-api.onrender.com/api/v1/dashboard/videos/${channel}`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,

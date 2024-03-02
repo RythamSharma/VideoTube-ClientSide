@@ -25,7 +25,7 @@ function Editprofile({ setProgress }) {
           .split("=")[1];
 
         const response = await axios.get(
-          "http://localhost:3000/api/v1/users/current-user",
+          "https://videotube-api.onrender.com/api/v1/users/current-user",
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,
@@ -80,7 +80,7 @@ function Editprofile({ setProgress }) {
         if (formdata.avatar) {
           // console.log(formdata.avatar);
           const response = await axios.patch(
-            "http://localhost:3000/api/v1/users/update-avatar",
+            "https://videotube-api.onrender.com/api/v1/users/update-avatar",
             { avatar: formdata.avatar },
             {
               headers: {
@@ -98,7 +98,7 @@ function Editprofile({ setProgress }) {
         setProgress(67);
         if (formdata.cover) {
           const response = await axios.patch(
-            "http://localhost:3000/api/v1/users/update-cover",
+            "https://videotube-api.onrender.com/api/v1/users/update-cover",
             { cover: formdata.cover },
             {
               headers: {
@@ -113,7 +113,7 @@ function Editprofile({ setProgress }) {
         }
         if ((formdata.email || formdata.fullname) && formdata.ismodified) {
           const response = await axios.patch(
-            "http://localhost:3000/api/v1/users/update-details",
+            "https://videotube-api.onrender.com/api/v1/users/update-details",
             {
               fullName: formdata.fullname,
               email: formdata.email,
@@ -145,7 +145,7 @@ function Editprofile({ setProgress }) {
             return;
           }
           const response = await axios.post(
-            "http://localhost:3000/api/v1/users/update-password",
+            "https://videotube-api.onrender.com/api/v1/users/update-password",
             {
               oldpass: formdata.oldpassword,
               newpass: formdata.newpassword,

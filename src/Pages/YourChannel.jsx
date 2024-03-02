@@ -14,7 +14,7 @@ function YourChannel({ setProgress, isSidebarOpen }) {
       // console.log("fetdcinhg ", accesstoken);
       if (document.cookie.length > 0) {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/dashboard/you",
+          "https://videotube-api.onrender.com/api/v1/dashboard/you",
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,

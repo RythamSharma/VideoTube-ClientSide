@@ -37,7 +37,7 @@ function Navbar({ toggleSideBar, search, setProgress, setChoice, setSearch }) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.post(
-          "http://localhost:3000/api/v1/users/logout",
+          "https://videotube-api.onrender.com/api/v1/users/logout",
           {},
           {
             headers: {
@@ -74,7 +74,7 @@ function Navbar({ toggleSideBar, search, setProgress, setChoice, setSearch }) {
           .split("=")[1];
 
         const response = await axios.get(
-          "http://localhost:3000/api/v1/users/current-user",
+          "https://videotube-api.onrender.com/api/v1/users/current-user",
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,

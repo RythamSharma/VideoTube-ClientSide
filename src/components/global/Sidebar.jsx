@@ -14,7 +14,7 @@ function Sidebar({ isSidebarOpen, setChoice }) {
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
         const response = await axios.get(
-          `http://localhost:3000/api/v1/subscriptions/c/${user._id}`,
+          `https://videotube-api.onrender.com/api/v1/subscriptions/c/${user._id}`,
           {
             headers: {
               Authorization: `bearer ${accesstoken}`,

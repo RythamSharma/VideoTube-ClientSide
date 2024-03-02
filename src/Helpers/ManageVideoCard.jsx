@@ -24,7 +24,7 @@ function ManageVideoCard(props) {
         .split("=")[1];
         props.setProgress(30)
         const response = await axios.delete(
-          `http://localhost:3000/api/v1/videos/${props.id}`,
+          `https://videotube-api.onrender.com/api/v1/videos/${props.id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -51,7 +51,7 @@ function ManageVideoCard(props) {
         .split("=")[1];
         props.setProgress(20)
         const response = await axios.patch(
-          `http://localhost:3000/api/v1/videos/toggle/publish/${props.id}`,
+          `https://videotube-api.onrender.com/api/v1/videos/toggle/publish/${props.id}`,
           {},
           {
             headers: {
@@ -80,7 +80,7 @@ function ManageVideoCard(props) {
         .split("=")[1];
         props.setProgress(20)
         const response = await axios.patch(
-          `http://localhost:3000/api/v1/videos/${props.id}`,
+          `https://videotube-api.onrender.com/api/v1/videos/${props.id}`,
           formdata,
           {
             headers: {
