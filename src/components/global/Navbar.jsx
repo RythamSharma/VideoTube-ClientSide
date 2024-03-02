@@ -5,12 +5,12 @@ import BottomNav from "./BottomNav";
 import { userState } from "../../store/atom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-function Navbar({ toggleSideBar,search, setProgress, setChoice, setSearch }) {
+function Navbar({ toggleSideBar, search, setProgress, setChoice, setSearch }) {
   const navigate = useNavigate();
   const handleOnChange = async (e) => {
     setSearch(e.target.value);
   };
-  const clearSearchQuery =  () => {
+  const clearSearchQuery = () => {
     setSearch("");
   };
   const handleInputKeyDown = (event) => {

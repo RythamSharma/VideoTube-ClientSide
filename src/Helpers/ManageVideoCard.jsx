@@ -16,11 +16,13 @@ function ManageVideoCard(props) {
   });
   const handleDeletePermanently = async () => {
     try {
+      props.setProgress(10)
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
-          ?.split("; ")
-          .find((row) => row.startsWith("accessToken="))
-          .split("=")[1];
+        ?.split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        .split("=")[1];
+        props.setProgress(30)
         const response = await axios.delete(
           `http://localhost:3000/api/v1/videos/${props.id}`,
           {
@@ -29,20 +31,25 @@ function ManageVideoCard(props) {
               Authorization: `bearer ${accesstoken}`,
             },
           }
-        );
-        props.setResponse(response.data.message);
-      }
-    } catch (error) {
+          );
+          props.setProgress(80)
+          props.setResponse(response.data.message);
+          props.setProgress(100)
+        }
+      } catch (error) {
+      props.setProgress(100)
       console.log(error);
     }
   };
   const handleOnPublish = async () => {
     try {
+      props.setProgress(10)
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
-          ?.split("; ")
-          .find((row) => row.startsWith("accessToken="))
-          .split("=")[1];
+        ?.split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        .split("=")[1];
+        props.setProgress(20)
         const response = await axios.patch(
           `http://localhost:3000/api/v1/videos/toggle/publish/${props.id}`,
           {},
@@ -52,21 +59,26 @@ function ManageVideoCard(props) {
               Authorization: `bearer ${accesstoken}`,
             },
           }
-        );
-        props.setResponse(response.data.message);
-      }
-    } catch (error) {
+          );
+          props.setProgress(80)
+          props.setResponse(response.data.message);
+          props.setProgress(100)
+        }
+      } catch (error) {
+      props.setProgress(100)
       console.log(error);
     }
   };
-
+  
   const handleSaveChanges = async () => {
     try {
+      props.setProgress(10)
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
-          ?.split("; ")
-          .find((row) => row.startsWith("accessToken="))
-          .split("=")[1];
+        ?.split("; ")
+        .find((row) => row.startsWith("accessToken="))
+        .split("=")[1];
+        props.setProgress(20)
         const response = await axios.patch(
           `http://localhost:3000/api/v1/videos/${props.id}`,
           formdata,
@@ -76,11 +88,14 @@ function ManageVideoCard(props) {
               Authorization: `bearer ${accesstoken}`,
             },
           }
-        );
-        props.setResponse(response.data.message);
-        // console.log(formdata);
-      }
-    } catch (error) {
+          );
+          props.setProgress(80)
+          props.setResponse(response.data.message);
+          props.setProgress(100)
+          // console.log(formdata);
+        }
+      } catch (error) {
+      props.setProgress(100)
       console.log(error);
     }
   };

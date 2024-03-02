@@ -6,6 +6,7 @@ import Navbar from "../components/global/Navbar";
 import VideoCardsecond from "../Helpers/VideoCard2";
 import VideoCard from "../Helpers/VideoCard";
 import VideoCard3 from "../Helpers/VideoCard3";
+import CommentCard from "../Helpers/CommentCard";
 function StreamVideo(props) {
   const { videoId, ownerId } = useParams();
   const [videoDetails, setVideoDetails] = useState({});
@@ -16,6 +17,64 @@ function StreamVideo(props) {
   const [comments, setComments] = useState([]);
   const [search, setSearch] = useState("");
   const [choice, setChoice] = useState("home");
+  const [user, setUser] = useState({});
+  const[content,setContent]=useState();
+  function calculateDaysAgo(createdAt) {
+    const currentDate = new Date();
+    const videoDate = new Date(createdAt);
+    const timeDifference = currentDate - videoDate;
+    const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    return daysAgo;
+  }
+  const handleComment = async () =>{
+    try {
+      if (document.cookie.length > 0) {
+        const accesstoken = document.cookie
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+          const response = await axios.post(`http://localhost:3000/api/v1/comments/${videoId}`,{content:content},{
+            headers:{
+              Authorization: `bearer ${accesstoken}`
+            }
+          })
+          console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const getCurrUser = async () => {
+    try {
+      if (document.cookie.length > 0) {
+        const accesstoken = document.cookie
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/users/current-user",
+          {
+            headers: {
+              Authorization: `bearer ${accesstoken}`,
+            },
+          }
+        );
+
+        setUser({
+          fullname: response.data.data.fullname,
+          coverImage: response.data.data.coverImage,
+          email: response.data.data.email,
+          _id: response.data.data._id,
+          avatar: response.data.data.avatar,
+          username: response.data.data.username,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const daysAgo = calculateDaysAgo(videoDetails.createdAt);
   const toggleSubscription = async () => {
     const accesstoken = document.cookie
       ?.split("; ")
@@ -75,7 +134,7 @@ function StreamVideo(props) {
           }
         );
         setVideos(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
       }
     } catch (error) {
       console.log(error);
@@ -97,7 +156,7 @@ function StreamVideo(props) {
             },
           }
         );
-        console.log(response.data.data[0]);
+        // console.log(response.data.data[0]);
         setOwnerDetails(response.data.data[0]);
       }
     } catch (error) {
@@ -121,7 +180,7 @@ function StreamVideo(props) {
             },
           }
         );
-        console.log(response.data.message);
+        // console.log(response.data.message);
       }
     } catch (error) {
       console.log(error);
@@ -144,7 +203,7 @@ function StreamVideo(props) {
           }
         );
         setVideoDetails(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setVideoSource(response.data.data.videoFile);
       }
     } catch (error) {
@@ -156,6 +215,7 @@ function StreamVideo(props) {
     fetchVIdeoBasedOnQuery();
     fetchvideodetails();
     getOwnerDetails();
+    getCurrUser();
     view();
   }, []);
   return (
@@ -197,7 +257,7 @@ function StreamVideo(props) {
                     <span className="hidden md:inline-block"> Subscribers</span>
                   </div>
                 </div>
-                <div className="mx-2 ml-20 md:ml-2 ">
+                <div className="mx-2 ml-7 md:ml-2 ">
                   <button
                     onClick={toggleSubscription}
                     className={`${
@@ -253,6 +313,33 @@ function StreamVideo(props) {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className=" text-white bg-[#272727] rounded-2xl mx-3 md:mx-0 mt-5 p-4">
+            <div className="flex font-bold">
+              <div>{videoDetails.views} views</div>
+              <div className="ml-2">{daysAgo} days ago</div>
+            </div>
+            <div className="mt-3">{videoDetails.description}</div>
+          </div>
+          <div className="comment-section border-t mx-3 md:mx-0 mt-5 text-white border-gray-700">
+            <div className="font-bold text-2xl ">
+              {comments.length} comments
+            </div>
+            <div className="add-comment mt-4">
+              <div className="flex flex-row items-center" >
+              <img className="w-9 rounded-full" src={user.avatar} alt="" />
+              <input value={content} onChange={(e)=>{setContent(e.target.value)}} type="text" className="bg-transparent border-b w-full active:outline-none focus:outline-none focus:border-red-700 transition-all duration-300 mx-3 "/>
+              </div>
+              <div className="float-right mt-2" >
+                <button onClick={()=>setContent("")} className="mx-3 font-semibold" >Cancel</button>
+                <button onClick={handleComment} className={`px-3 py-[7px] ${content?"bg-blue-500 text-black":"bg-[#272727] text-gray-400 "}  rounded-3xl  `} >Comment</button>
+              </div>
+            </div>
+            <div className="comments">
+              {comments.map((comment)=>(
+                <CommentCard owner={comment.owner} content={comment.content}/>
+              ))}
             </div>
           </div>
         </div>

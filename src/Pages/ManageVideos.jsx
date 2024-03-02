@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ManageVideoCard from "../Helpers/ManageVideoCard";
 
-function ManageVideos() {
+function ManageVideos({setProgress}) {
   const [videos, setVideos] = useState([]);
   const[response,setResponse]=useState(null);
   const getVideos = async () => {
@@ -21,7 +21,6 @@ function ManageVideos() {
           }
         );
         setVideos(response.data.data);
-        console.log(response.data.data);
       }
     } catch (error) {
       console.log(error);
@@ -44,6 +43,7 @@ function ManageVideos() {
                 id={video._id}
                 description={video.description}
                 title={video.title}
+                setProgress={setProgress}
                 createdAt={video.createdAt}
                 views={video.views}
                 isPublished={video.isPublished}

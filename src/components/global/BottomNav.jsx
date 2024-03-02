@@ -2,7 +2,7 @@ import React from "react";
 
 function BottomNav({ setChoice }) {
   return (
-    <div className="fixed bottom-0  text-white bg-black right-0 left-0 p-2">
+    <div className="fixed bottom-0 z-20  text-white bg-black right-0 left-0 p-2">
       <ul className="flex flex-row justify-around items-center">
         <li
           className="flex flex-col items-center cursor-pointer "

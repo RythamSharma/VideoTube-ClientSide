@@ -61,7 +61,7 @@ function UploadVideo({setProgress}) {
           />
         </div>
         <div className="flex flex-row items-center md:mt-6">
-          <div className="flex flex-col justify-center items-center bg-[#272727] p-2 w-[90vw] md:w-fit md:p-11 mx-3 rounded-lg">
+          <div className="flex flex-col justify-center items-center bg-[#181818] p-2 w-[90vw] md:w-fit md:p-11 mx-3 rounded-lg">
             <div className=" m-1 flex flex-col w-full">
               <p className="text-white text-center text-xl md:text-2xl mb-11 font-bold ">
                 Upload Video on{" "}
@@ -138,7 +138,7 @@ function UploadVideo({setProgress}) {
                   className="cursor-pointer bg-[#363131] text-white py-2 px-4 w-full text-center rounded-lg border border-white inline-block"
                 >
                   {formdata.videoFile
-                    ? formdata.videoFile.name
+                    ? formdata.videoFile.name.slice(0,40)
                     : "Choose Video "}
                 </label>
               </div>

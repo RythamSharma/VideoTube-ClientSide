@@ -22,12 +22,13 @@ function VideoCard3(props) {
       className="flex flex-col md:flex-row my-2 mx-1 cursor-pointer"
       onClick={handleVideoStream}
     >
-      <div className="thumbnail mr-2">
+      <div className="thumbnail relative mr-2">
         <img
-          className="md:w-[200px] w-full rounded-xl"
+          className="md:w-[200px] w-full  rounded-xl"
           src={props.thumbnail}
           alt=""
         />
+        <p className="absolute right-1 bottom-1 bg-black px-1 rounded text-xs" >{durat}</p>
       </div>
       <div className="content w-full md:w-[320px]  flex flex-col text-wrap text-white ">
         <p className="font-semibold  mb-1">{props.title}</p>
