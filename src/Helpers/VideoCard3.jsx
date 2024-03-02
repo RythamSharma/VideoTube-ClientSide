@@ -8,7 +8,7 @@ function VideoCard3(props) {
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     return daysAgo;
   }
-  const durat = props.duration.toFixed(2);
+  const durat = (props.duration/60).toFixed(2);
   const daysAgo = calculateDaysAgo(props.createdAt);
   const navigate = useNavigate();
   const handleVideoStream = () => {

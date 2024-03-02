@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/global/Navbar";
-import VideoCardsecond from "../Helpers/VideoCard2";
-import VideoCard from "../Helpers/VideoCard";
 import VideoCard3 from "../Helpers/VideoCard3";
 import CommentCard from "../Helpers/CommentCard";
 function StreamVideo(props) {
@@ -18,7 +16,7 @@ function StreamVideo(props) {
   const [search, setSearch] = useState("");
   const [choice, setChoice] = useState("home");
   const [user, setUser] = useState({});
-  const[content,setContent]=useState();
+  const [content, setContent] = useState("");
   function calculateDaysAgo(createdAt) {
     const currentDate = new Date();
     const videoDate = new Date(createdAt);
@@ -26,24 +24,29 @@ function StreamVideo(props) {
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     return daysAgo;
   }
-  const handleComment = async () =>{
+  const handleComment = async () => {
     try {
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
           ?.split("; ")
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
-          const response = await axios.post(`http://localhost:3000/api/v1/comments/${videoId}`,{content:content},{
-            headers:{
-              Authorization: `bearer ${accesstoken}`
-            }
-          })
-          console.log(response)
+        const response = await axios.post(
+          `http://localhost:3000/api/v1/comments/${videoId}`,
+          { content: content },
+          {
+            headers: {
+              Authorization: `bearer ${accesstoken}`,
+            },
+          }
+        );
+        getVideoComments();
+        setContent("");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const getCurrUser = async () => {
     try {
       if (document.cookie.length > 0) {
@@ -110,7 +113,6 @@ function StreamVideo(props) {
             },
           }
         );
-        console.log(response.data.data);
         setComments(response.data.data);
       }
     } catch (error) {
@@ -295,7 +297,7 @@ function StreamVideo(props) {
                   </button>
                 </div>
                 <div className="mr-2">
-                  <button className="bg-[#272727] flex px-3 p-2 rounded-full">
+                  <button className="bg-[#272727] flex pr-4 py-2 md:px-3 md:p-2 rounded-full">
                     <img
                       className="w-6 mr-1"
                       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAl0lEQVR4nO2SawqDQAwGcworvWI9rth6mikLEeJaH9CNomZg0R9ZvzGJSBD8AYocBSGgxAgklvAoiCVU9mj1C6i3jiDVpjulwhvNeecSvwQ0PNUmmhICFdDqB3vgOScAPEztx9a6SGAE3MKXJAYB9/CZ+Q5P+z7Zk+Iw7oTF7883SOwXno2j0+Pb9pVOVHJZKMR5BYJb8AUh2BBbQ/uxeQAAAABJRU5ErkJggg=="
@@ -327,18 +329,45 @@ function StreamVideo(props) {
               {comments.length} comments
             </div>
             <div className="add-comment mt-4">
-              <div className="flex flex-row items-center" >
-              <img className="w-9 rounded-full" src={user.avatar} alt="" />
-              <input value={content} onChange={(e)=>{setContent(e.target.value)}} type="text" className="bg-transparent border-b w-full active:outline-none focus:outline-none focus:border-red-700 transition-all duration-300 mx-3 "/>
+              <div className="flex flex-row items-center">
+                <img className="w-9 rounded-full" src={user.avatar} alt="" />
+                <input
+                  value={content}
+                  onChange={(e) => {
+                    setContent(e.target.value);
+                  }}
+                  type="text"
+                  className="bg-transparent border-b w-full outline-none  focus:border-red-700 transition-all duration-300 mx-3 "
+                />
               </div>
-              <div className="float-right mt-2" >
-                <button onClick={()=>setContent("")} className="mx-3 font-semibold" >Cancel</button>
-                <button onClick={handleComment} className={`px-3 py-[7px] ${content?"bg-blue-500 text-black":"bg-[#272727] text-gray-400 "}  rounded-3xl  `} >Comment</button>
+              <div className="float-right mt-2">
+                <button
+                  onClick={() => setContent("")}
+                  className="mx-3 font-semibold"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleComment}
+                  className={`px-3 py-[7px] ${
+                    content
+                      ? "bg-blue-500 text-black"
+                      : "bg-[#272727] text-gray-400 "
+                  }  rounded-3xl  `}
+                >
+                  Comment
+                </button>
               </div>
             </div>
-            <div className="comments">
-              {comments.map((comment)=>(
-                <CommentCard owner={comment.owner} content={comment.content}/>
+            <div className="comments mt-12">
+              {comments.map((comment) => (
+                <div key={comment._id}>
+                  <CommentCard
+                    owner={comment.owner}
+                    content={comment.content}
+                    createdAt={comment.createdAt}
+                  />
+                </div>
               ))}
             </div>
           </div>
