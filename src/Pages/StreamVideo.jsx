@@ -15,6 +15,8 @@ function StreamVideo(props) {
   const [comments, setComments] = useState([]);
   const [search, setSearch] = useState("");
   const [choice, setChoice] = useState("home");
+  const[liked,setLiked]=useState(false);
+  const[likes,setLikes]=useState();
   const [user, setUser] = useState({});
   const [content, setContent] = useState("");
   function calculateDaysAgo(createdAt) {
@@ -24,6 +26,34 @@ function StreamVideo(props) {
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     return daysAgo;
   }
+  const handleLikeButton = async () => {
+    try {
+      if (document.cookie.length > 0) {
+        const accesstoken = document.cookie
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+        const response = await axios.post(
+          `https://videotube-api.onrender.com/api/v1/likes/toggle/v/${videoId}`,
+          {},
+          {
+            headers: {
+              Authorization: `bearer ${accesstoken}`,
+            },
+          }
+        );
+        if(liked){
+          setLikes((prev)=>prev-1)
+          setLiked(false)
+        }
+        else{
+          setLikes((prev)=>prev+1)
+          setLiked(true)
+        }
+        console.log(liked);
+      }
+    } catch (error) {}
+  };
   const handleComment = async () => {
     try {
       if (document.cookie.length > 0) {
@@ -205,7 +235,8 @@ function StreamVideo(props) {
           }
         );
         setVideoDetails(response.data.data);
-        // console.log(response.data.data);
+        setLiked(response.data.data.liked);
+        setLikes(response.data.data.likes)
         setVideoSource(response.data.data.videoFile);
       }
     } catch (error) {
@@ -272,14 +303,30 @@ function StreamVideo(props) {
               </div>
               <div className="flex flex-row items-center justify-around mt-3">
                 <div className="mr-2 flex ">
-                  <button className="bg-[#272727] flex p-2 pr-4 rounded-l-full">
-                    <img
-                      className="w-6"
-                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACs0lEQVR4nO2ZTYhNYRjH3zFNGIzmNo1GUT4WiBoWPlNYS1mMLGZlwYLCkrCzEGqmKCxGsbBiQVkYpCwkNWWKGfkoZOQzY8i3n97mf+t0594zR+e54z06/zqb8z79///n3vfjOc/rXI4cOcYcwESgA3gLDAAngEaXJQC1wBVG4iFQcFkBcFDGXwCtwHzgrt4dcVkAsA74BfwAlkfer1Iij13oAJr0L3jsLRmbrPdfXMgAaoBLMnsNGFcy7qeYxwMXMoCdMvoamF5m/KjGj7lQASwGvgK/gfVlxuuBd0pkiQsRwCSgTyY7KsRs1fhNFyqA0zLZC0yoEFPceje5EAG0yeAnYF6FmDWRM6XOhQZgNjAok1ti4s4rZp8LDUAdcFsGz8XEzQJ++rMDaHahATikJJ7GFYJAp+JOudDA8JwvliArYuIaNPX8lrzAhQSgGXipX3lPwgOyHPzm8D7mGQBu+TLHlzbVKEEuy8jV0hKkTHw78J30uA9Ms0xke6QEaUl5gDaO8swANgD3pHnWKokC8EGkG01Ik+nOleagFeFuEXabECbXbSyuKSvCbhG2mRAm110k3X4rwlciHFGeVxPA6sgut82C0J/OHrUmDpPrjgeOR/TTFZ3FfdDM4d/r75CFO1lPpGCy6ANIZJksPM9sIgx3ZnpkoTPLifRK/knqlus/TuSi5L/FVdtZSKQGOCwL17O+2Jv+l11roSw8S0v0UURTzNwl154ZWfBdacn6RdRq5jCZbjvwObJrpav1gJMi22/mMplul3R7TLowuvMofh02mLhMprtUun2WpP6qADXcYr/XDTXrze9UgDm62PS4AEw1Ix+9JfvImnhlJJk3wAF/TWDdsgFa/IdUpCW7y5I/2vP17aCxwpmqTmVgre7Ofd9pyNj8EHAD2Fy1BHLkyOEyiz+lhVxrUBoKtwAAAABJRU5ErkJggg=="
-                      alt="...."
-                    ></img>
-                    <div className="mx-2">{videoDetails.likes}</div>
-                  </button>
+                  {liked ? (
+                    <button
+                      onClick={handleLikeButton}
+                      className="bg-[#272727] flex p-2 pr-4 rounded-l-full"
+                    >
+                      <img
+                        className="w-6"
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABi0lEQVR4nO3Zu2oVURSA4SVqJVpEUWuJhVUKa0FR+1TiMwgiaOsLWGgTRLQxja9g5wXB+ASKEdQENILgJUeCdz8ZOIUonsxh9jmzZzMfTD9/McNae0f0er2pw05cwzu8xk3siy7Bdjz0rxfYHV2BS/7vSnQBTuLniJDnkTvsxRujfYmcYQtu29zLyBnOq+dq5AqH8bVmyFzkCDvwtGbEvcgVFtU3HznCqTEiVrA1coMDWB8j5ELkBtuwNEbEBmaiYyNIN365OLrJCPK3XzgUGY4ga5r7gPcjnlU8wkXsamsESW0Z+1OGnNGeW6kiZvCxxZDBtAfCSVlPFXKn5ZDlVCFvWw75hnMpQn7Iw3zTkFwslRLyqZSQV6WEXC4hZLVaq0sI+Y5jJYRUHpQSslFKyErTkIE8LDQNqXsAN+kFa0/TkBstRzxOctuFE0WM8RXcbzHkc6SCg8OLzTY8SxYyjDnSUszZpCHDmFncnWLEYnUUlTzkj6DjuI4n1Z6Q+OUHw2/y9MQCer1edNZvHJ3eD3RXlmQAAAAASUVORK5CYII="
+                      ></img>
+                      <div className="mx-2">{likes}</div>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleLikeButton}
+                      className="bg-[#272727] flex p-2 pr-4 rounded-l-full"
+                    >
+                      <img
+                        className="w-6"
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACs0lEQVR4nO2ZTYhNYRjH3zFNGIzmNo1GUT4WiBoWPlNYS1mMLGZlwYLCkrCzEGqmKCxGsbBiQVkYpCwkNWWKGfkoZOQzY8i3n97mf+t0594zR+e54z06/zqb8z79///n3vfjOc/rXI4cOcYcwESgA3gLDAAngEaXJQC1wBVG4iFQcFkBcFDGXwCtwHzgrt4dcVkAsA74BfwAlkfer1Iij13oAJr0L3jsLRmbrPdfXMgAaoBLMnsNGFcy7qeYxwMXMoCdMvoamF5m/KjGj7lQASwGvgK/gfVlxuuBd0pkiQsRwCSgTyY7KsRs1fhNFyqA0zLZC0yoEFPceje5EAG0yeAnYF6FmDWRM6XOhQZgNjAok1ti4s4rZp8LDUAdcFsGz8XEzQJ++rMDaHahATikJJ7GFYJAp+JOudDA8JwvliArYuIaNPX8lrzAhQSgGXipX3lPwgOyHPzm8D7mGQBu+TLHlzbVKEEuy8jV0hKkTHw78J30uA9Ms0xke6QEaUl5gDaO8swANgD3pHnWKokC8EGkG01Ik+nOleagFeFuEXabECbXbSyuKSvCbhG2mRAm110k3X4rwlciHFGeVxPA6sgut82C0J/OHrUmDpPrjgeOR/TTFZ3FfdDM4d/r75CFO1lPpGCy6ANIZJksPM9sIgx3ZnpkoTPLifRK/knqlus/TuSi5L/FVdtZSKQGOCwL17O+2Jv+l11roSw8S0v0UURTzNwl154ZWfBdacn6RdRq5jCZbjvwObJrpav1gJMi22/mMplul3R7TLowuvMofh02mLhMprtUun2WpP6qADXcYr/XDTXrze9UgDm62PS4AEw1Ix+9JfvImnhlJJk3wAF/TWDdsgFa/IdUpCW7y5I/2vP17aCxwpmqTmVgre7Ofd9pyNj8EHAD2Fy1BHLkyOEyiz+lhVxrUBoKtwAAAABJRU5ErkJggg=="
+                        alt="...."
+                      ></img>
+                      <div className="mx-2">{likes}</div>
+                    </button>
+                  )}
                   <button className="bg-[#272727] border-l border-gray-600 pl-2 p-2 rounded-r-full">
                     <img
                       className="rotate-180 w-6 "
