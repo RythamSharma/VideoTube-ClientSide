@@ -363,8 +363,10 @@ function StreamVideo(props) {
               {comments.map((comment) => (
                 <div key={comment._id}>
                   <CommentCard
+                    id={comment._id}
                     owner={comment.owner}
                     content={comment.content}
+                    getVideoComments={getVideoComments}
                     createdAt={comment.createdAt}
                   />
                 </div>

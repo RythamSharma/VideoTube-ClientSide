@@ -17,7 +17,6 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
         }
       })
       setIssub(response.data.statusCode!==200)
-      // console.log(response.data)
     }
   }
   const fetchChannelDetails = async () => {
