@@ -1,34 +1,40 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
-
+import { useRecoilValue } from "recoil";
+import { userState } from "../store/atom";
 function CommentCard(props) {
+  const loggedinUser = useRecoilValue(userState);
   const [user, setUser] = useState({});
   const [liked, setLiked] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editcontent, setEditcontent] = useState(props.content);
   const [modal, setModal] = useState(false);
-  const editCommentHandle = async () =>{
+  const editCommentHandle = async () => {
     try {
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
           ?.split("; ")
           .find((row) => row.startsWith("accessToken="))
           .split("=")[1];
-          const reponse = await axios.patch(`https://videotube-api.onrender.com/api/v1/comments/c/${props.id}`,{
-            content:editcontent
-          },{
-            headers:{
-              Authorization:`bearer ${accesstoken}`
-            }
-          })
-          setEditing(false);
-          props.getVideoComments();
+        const reponse = await axios.patch(
+          `https://videotube-api.onrender.com/api/v1/comments/c/${props.id}`,
+          {
+            content: editcontent,
+          },
+          {
+            headers: {
+              Authorization: `bearer ${accesstoken}`,
+            },
+          }
+        );
+        setEditing(false);
+        props.getVideoComments();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const editcontenttoggle = () => {
     setEditing(true);
     setModal(false);
@@ -122,7 +128,12 @@ function CommentCard(props) {
           <div className="mt-2 ">
             {editing ? (
               <div className="float-right mt-2">
-                <button className="mx-3 font-semibold" onClick={()=>setEditing(false)}>Cancel</button>
+                <button
+                  className="mx-3 font-semibold"
+                  onClick={() => setEditing(false)}
+                >
+                  Cancel
+                </button>
                 <button
                   onClick={editCommentHandle}
                   className={`px-2 py-[5px] ${
@@ -170,29 +181,47 @@ function CommentCard(props) {
           />
           <div className="modal">
             {modal && (
-              <div className="bg-[#282828] w-fit absolute float-right p-3 rounded-xl  md:top-7 top-14 right-1 z-30 text-white md:right-10">
-                <div className=" flex justify-center items-center font-semibold "></div>
-                <p
-                  className="flex cursor-pointer p-2 rounded-lg"
-                  onClick={editcontenttoggle}
+              <>
+                <div
+                  className={`bg-[#282828] ${
+                    loggedinUser._id === props.owner ? "block" : "hidden"
+                  } w-fit absolute float-right p-3 rounded-xl  md:top-7 top-14 right-1 z-30 text-white md:right-10`}
                 >
-                  <img
-                    className="w-5 h-auto mr-3"
-                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABt0lEQVR4nO3ZPU7DQBCG4eW3IUhcAAqUQIA2h6ClQHTAHTgAVFAiTkJHhUAK5AzQUPFbUSBaeJGlsWQZJ3G8nt21tF8V2VlnnuxkEivGxMRMHGAWOAYegC/gHtg2TQowB1zyPz+NwgCHDM/AhB5gKvP4fAjk24QcYAG4BvYyx84KII8m1AAt4E4KfQLmR+zMkWkA4hloFzwnxSQDYMYEjnjJI3I7c5BMs2EXGuA+JyURbWmznTLvSCiITgEiabMkN9lpNhJi3E+nW3npd2Ajd74jOOTbfLHMRZ1CVBCuIWoIlxBVhCuIOsIFJIf4UEFoQwoQm2UQyIgOAmKDoEo9GpCqCKt66obYIIKBlECsjftg4xtSEvE6bjrhE1IXwiukToQ3SN0ILxANhHNIcpMD9GXpG9DNne/KceTmqaVZjw1kVZb9Ar26ED4gu+k6uedPf16sV2knn5DTDCTF9GwRPiBXOUjaZpXaySckmVJFsUI4hQArsuRTWugC2Ae2gOmJC7CsxwayBCwbpeCytTRDhEhMIKFqPRGiFOKOSEwgoWo9EaIU4o4EGlNhK9P/8UJKX6VvY4x+/gDtAFvi5WSVywAAAABJRU5ErkJggg=="
-                  />
-                  Edit
-                </p>
-                <p
-                  className="flex cursor-pointer mt-1 p-1 rounded-lg"
-                  onClick={deleteComment}
+                  <p
+                    className="flex cursor-pointer p-2 rounded-lg"
+                    onClick={editcontenttoggle}
+                  >
+                    <img
+                      className="w-5 h-auto mr-3"
+                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABt0lEQVR4nO3ZPU7DQBCG4eW3IUhcAAqUQIA2h6ClQHTAHTgAVFAiTkJHhUAK5AzQUPFbUSBaeJGlsWQZJ3G8nt21tF8V2VlnnuxkEivGxMRMHGAWOAYegC/gHtg2TQowB1zyPz+NwgCHDM/AhB5gKvP4fAjk24QcYAG4BvYyx84KII8m1AAt4E4KfQLmR+zMkWkA4hloFzwnxSQDYMYEjnjJI3I7c5BMs2EXGuA+JyURbWmznTLvSCiITgEiabMkN9lpNhJi3E+nW3npd2Ajd74jOOTbfLHMRZ1CVBCuIWoIlxBVhCuIOsIFJIf4UEFoQwoQm2UQyIgOAmKDoEo9GpCqCKt66obYIIKBlECsjftg4xtSEvE6bjrhE1IXwiukToQ3SN0ILxANhHNIcpMD9GXpG9DNne/KceTmqaVZjw1kVZb9Ar26ED4gu+k6uedPf16sV2knn5DTDCTF9GwRPiBXOUjaZpXaySckmVJFsUI4hQArsuRTWugC2Ae2gOmJC7CsxwayBCwbpeCytTRDhEhMIKFqPRGiFOKOSEwgoWo9EaIU4o4EGlNhK9P/8UJKX6VvY4x+/gDtAFvi5WSVywAAAABJRU5ErkJggg=="
+                    />
+                    Edit
+                  </p>
+                  <p
+                    className="flex cursor-pointer mt-1 p-1 rounded-lg"
+                    onClick={deleteComment}
+                  >
+                    <img
+                      className="w-6 h-auto mr-3 "
+                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABWElEQVR4nO2aQU7DMBAAfeIHVPQrlO9B4Vm0EhWFEz3wgZZvDHIwEoqaxru2YyvsnHLY7GayG8cHO2fMFOAKeAK+GOcErP09rjWAR+Q8uNbg5y17biNiV7+dca1BoFT8ZDQtAmxph+1cRDY5OtORnKh2XUwkDawjA9hoJYKN1gA2Wolgo/XfRwvYAO/AQpBzAbwAz9q6JUT2IeQQIxMkfKznVVu3hMg18BHCPoGlIPZGW1dMTMIYGYlE1VXrkoxUovrye05GI9HEf6T3MR9615KVrUP94DkS9rog6kRK3alElqXrZk04i9HizIct+c80IXJpddLIUEMkZomVyjC1iHDbIdnOdORwiEoIvCVsGvfauiVEdsptvL9np60rJnvCWnUxkTSwjgxgo5UINloD2Gg1OFqnkHOVLel4zbtQ85gzqT83Uov73Adm1n86MwVHL9HkwRvDjfMNy032c2DQYhYAAAAASUVORK5CYII="
+                    />
+                    Delete
+                  </p>
+                </div>
+                <div
+                  className={`bg-[#282828] ${
+                    loggedinUser._id === props.owner ? "hidden" : "block"
+                  } w-fit absolute float-right p-3 rounded-xl  md:top-7 top-14 right-1 z-30 text-white md:right-10`}
                 >
-                  <img
-                    className="w-6 h-auto mr-3 "
-                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABWElEQVR4nO2aQU7DMBAAfeIHVPQrlO9B4Vm0EhWFEz3wgZZvDHIwEoqaxru2YyvsnHLY7GayG8cHO2fMFOAKeAK+GOcErP09rjWAR+Q8uNbg5y17biNiV7+dca1BoFT8ZDQtAmxph+1cRDY5OtORnKh2XUwkDawjA9hoJYKN1gA2Wolgo/XfRwvYAO/AQpBzAbwAz9q6JUT2IeQQIxMkfKznVVu3hMg18BHCPoGlIPZGW1dMTMIYGYlE1VXrkoxUovrye05GI9HEf6T3MR9615KVrUP94DkS9rog6kRK3alElqXrZk04i9HizIct+c80IXJpddLIUEMkZomVyjC1iHDbIdnOdORwiEoIvCVsGvfauiVEdsptvL9np60rJnvCWnUxkTSwjgxgo5UINloD2Gg1OFqnkHOVLel4zbtQ85gzqT83Uov73Adm1n86MwVHL9HkwRvDjfMNy032c2DQYhYAAAAASUVORK5CYII="
-                  />
-                  Delete
-                </p>
-              </div>
+                  <p className="flex cursor-pointer p-0 rounded-lg">
+                    <img
+                      className="w-6 mr-2 mt-[1px] h-auto"
+                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAACXBIWXMAAAsTAAALEwEAmpwYAAACdklEQVR4nO2by04UQRSGOxgxIi4IC6NL9zwAJqwgIfIA+ATwBCZetiS41idQn4An0ETiwtuCFcaVgbAhLtSNFwifqeSQGYkLxjo9Xaf6/5LZTZ/zn39qqqtOVzeNEEIIIYQQQogaoXsOgEfAZBMRymGzicip+g7z3zIJB01EujawFA2hxVOAhtDiKUBDaPEUoCG0eArQEFo83XDXVbxLsP+kA/M+AZdcxTeVA1wDvlq5tz0D98XA51bqlnfgzg0EXgPbLcafB06AH8DNGg3cBl61FHsCeG9lbrSRoHMD2wRYtxL3gSttJKjWQGAGOLQSV9tKUu0cCDyx8l56x65+DgTmgCP7zHnGLs7ANgBeWGmP205UnYHAHSvrCzBbvYE4zoHAFLBnZa15xOzVHAhsWElp7TfhEbN4A71IuwzbbaRdx8K4ktZk4JaV83ScSauYA4FlK+UbcN1PXQ/mQGAS2HVtlEYyMBfgogzMBFiysfAduNGrEYjTOnDoJvLMR1nP1oH8vYyZ91EXwEBPhhbSH4AL40hYm4GXgc9j38p1xC/gLbDiXNOqxU/N1BnP2P9KVgorznXFbGcxQjxbAN+3S954aQjdUGXEeMBVu+Snl4bQLX1GH4EP7ZJdLw2hHyoxYMf+PuchfW/RS8MZPWuWIzVZpyIZeB5+A+9cz6pEf7DOgHulvLoQ6mgHcGwhp5uCSPvjEIeLGPTlHpQyAhOpyWrN1sRyyQYuDY3CUvno9uOeRnQJZqRdhd0c0k2iVOo54hsaGZiJDMxEBmYiAzORgZnIwExkYCYyMBMZmIkMzEQGZiIDM5GBmcjATGSgEEIIIYQQovHkD1nnKQa8711dAAAAAElFTkSuQmCC"
+                    />
+                    Report
+                  </p>
+                </div>
+              </>
             )}
           </div>
         </div>
