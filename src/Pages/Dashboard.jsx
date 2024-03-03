@@ -4,7 +4,7 @@ import Sidebar from "../components/global/Sidebar";
 import VideosLayout from "../components/VideosLayout";
 import ChannelDashboard from "./ChannelDashboard";
 import YourChannel from "./YourChannel";
-import QueryVideoLayout from "../components/QueryVIdeoLayout";
+import QueryVideoLayout from "../components/QueryVideoLayout";
 const Profile = ({ setProgress }) => {
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setSideBar] = useState(true);
