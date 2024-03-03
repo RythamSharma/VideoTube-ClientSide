@@ -4,6 +4,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
 import { userState } from "../store/atom";
+import loader from "../Images/loader2.png";
+import "../App.css";
 
 function VideosLayout({ isSidebarOpen, setProgress }) {
   const user = useRecoilValue(userState);
@@ -33,7 +35,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
         if (response.data.data.length < 9) {
           setHasmore(false);
         }
-      // console.log(response.data.data);
+        // console.log(response.data.data);
         setVideos((prevVideos) => [...prevVideos, ...response.data.data]);
       } catch (error) {
         console.log(error);
@@ -55,7 +57,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
       loader={<h4>Loading...</h4>}
       endMessage={<p>No more videos to load.</p>}
     >
-      {videos ? (
+      {videos.length > 0 ? (
         videos.map((video) => (
           <VideoCard
             key={video._id}
@@ -72,9 +74,13 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
         ))
       ) : (
         <>
-          <div className="text-white font-bold flex flex-row absolute text-sm top-[50vh] md:top-[54vh] md:left-[44vw] md:text-xl">
-            <div> Sign in to view content of creaters on </div>
-            <div className="text-red-700 ml-2"> VideoTube</div>
+          <div className="z-50 fixed top-0 right-0 left-0 bottom-0 overflow-hidden">
+            <img
+              className="w-[100vw] h-[100vh] opacity-10"
+              src={loader}
+              alt=""
+            />
+            <div className="wipe-animation"></div>
           </div>
         </>
       )}

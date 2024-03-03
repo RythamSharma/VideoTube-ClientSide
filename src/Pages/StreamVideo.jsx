@@ -5,6 +5,8 @@ import axios from "axios";
 import Navbar from "../components/global/Navbar";
 import VideoCard3 from "../Helpers/VideoCard3";
 import CommentCard from "../Helpers/CommentCard";
+import loader from '../Images/loader.png'
+import '../App.css'
 function StreamVideo(props) {
   const { videoId, ownerId } = useParams();
   const [videoDetails, setVideoDetails] = useState({});
@@ -252,7 +254,8 @@ function StreamVideo(props) {
     view();
   }, []);
   return (
-    <div className="text-white">
+    <>
+    { videoSource? <div className="text-white">
       <Navbar
         setChoice={setChoice}
         setProgress={props.setProgress}
@@ -303,6 +306,7 @@ function StreamVideo(props) {
               </div>
               <div className="flex flex-row items-center justify-around mt-3">
                 <div className="mr-2 flex ">
+                  
                   {liked ? (
                     <button
                       onClick={handleLikeButton}
@@ -441,7 +445,12 @@ function StreamVideo(props) {
           ))}
         </div>
       </div>
+    </div>:    <div className="h-[100vh] w-[100vw] relative overflow-hidden">
+      <img className="w-[100vw] h-[100vh] opacity-10" src={loader} alt="" />
+      <div className="wipe-animation"></div>
     </div>
+}
+    </>
   );
 }
 
