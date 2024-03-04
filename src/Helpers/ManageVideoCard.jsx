@@ -127,7 +127,7 @@ function ManageVideoCard(props) {
     }
   };
   return (
-    <div className="bg-[#181818] text-white relative  rounded-lg md:rounded-2xl p-2 m-2 w-full">
+    <div className="bg-[#181818] text-white relative  rounded-lg md:rounded-2xl p-2 my-2 md:m-2 w-full">
       <div className="flex flex-col md:flex-row justify-evenly items-center p-1 md:p-2">
         <div>
           <div name="thumbnail" className="relative mt-1">
@@ -152,9 +152,9 @@ function ManageVideoCard(props) {
             </label>
           </div>
         </div>
-        <div className="flex flex-col ">
+        <div className="flex flex-col  ">
           <div className="my-1">
-            <label htmlFor="title" className="block font-bold">
+            <label htmlFor="title" className="md:block font-bold">
               Video Title :
             </label>
             <input
@@ -166,7 +166,7 @@ function ManageVideoCard(props) {
             />
           </div>
           <div className="m">
-            <label htmlFor="description" className="block font-bold">
+            <label htmlFor="description" className="md:block font-bold">
              Video Description :
             </label>
             <input
@@ -177,7 +177,7 @@ function ManageVideoCard(props) {
               className="bg-transparent w-fit md:w-[600px] outline:none focus:border-red-700 border-b border-gray-600  outline-none  transition-all duration-300 "
             />
           </div>
-          <div className="flex font-bold mt-7">
+          <div className="flex font-bold mt-2 md:mt-7">
             Views :{" "}
             <div className="bg-transparent font-normal active:outline-none w-fit md:w-[600px] ml-2">
               {" "}
@@ -225,7 +225,7 @@ function ManageVideoCard(props) {
               onClick={handleSaveChanges}
               className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
             >
-              Save <span className="hidden md:inline-block"> Changes</span>
+              Save <span className=" md:inline-block"> Changes</span>
             </button>
           )}
         </div>
