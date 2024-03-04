@@ -74,7 +74,7 @@ function VideosLayout({ isSidebarOpen, setProgress }) {
         ))
       ) : (
         <>
-          <div className="z-50 fixed top-0 right-0 left-0 bottom-0 overflow-hidden">
+          <div className="z-10 fixed top-0 right-0 left-0 bottom-0 overflow-hidden">
             <img
               className="w-[100vw] h-[100vh] opacity-10"
               src={loader}
