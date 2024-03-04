@@ -5,6 +5,7 @@ import VideosLayout from "../components/VideosLayout";
 import ChannelDashboard from "./ChannelDashboard";
 import YourChannel from "./YourChannel";
 import QueryVideoLayout from "../components/QueryVideoLayout";
+import LikedVideos from "./LikedVideos";
 const Profile = ({ setProgress }) => {
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setSideBar] = useState(true);
@@ -49,9 +50,18 @@ const Profile = ({ setProgress }) => {
             isSidebarOpen={isSidebarOpen}
             setProgress={setProgress}
           />
-        ) : choice==="search"? (
-          <QueryVideoLayout isSidebarOpen={isSidebarOpen} search={search} setProgress={setProgress}/>
-        ):(null)}
+        ) : choice === "search" ? (
+          <QueryVideoLayout
+            isSidebarOpen={isSidebarOpen}
+            search={search}
+            setProgress={setProgress}
+          />
+        ) : choice==="liked"?(
+          <LikedVideos
+          setProgress={setProgress}
+          isSidebarOpen={isSidebarOpen}
+          />
+        ): null}
       </div>
     </div>
   );

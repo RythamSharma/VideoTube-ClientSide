@@ -24,7 +24,7 @@ function VideoCard3(props) {
     >
       <div className="thumbnail relative mr-2">
         <img
-          className="md:w-[200px] w-full  rounded-xl"
+          className="md:w-[200px] w-full rounded-xl"
           src={props.thumbnail}
           alt=""
         />
