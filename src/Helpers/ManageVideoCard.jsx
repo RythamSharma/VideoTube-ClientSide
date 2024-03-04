@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 function ManageVideoCard(props) {
+  const [isloading, setIsloading] = useState(0);
   function calculateDaysAgo(createdAt) {
     const currentDate = new Date();
     const videoDate = new Date(createdAt);
@@ -11,18 +12,20 @@ function ManageVideoCard(props) {
   const daysAgo = calculateDaysAgo(props.createdAt);
   const [formdata, setFormdata] = useState({
     thumbnail: null,
+    show: props.thumbnail,
     title: props.title,
     description: props.description,
   });
   const handleDeletePermanently = async () => {
     try {
-      props.setProgress(10)
+      setIsloading(1);
+      props.setProgress(10);
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
-        ?.split("; ")
-        .find((row) => row.startsWith("accessToken="))
-        .split("=")[1];
-        props.setProgress(30)
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+        props.setProgress(30);
         const response = await axios.delete(
           `https://videotube-api.onrender.com/api/v1/videos/${props.id}`,
           {
@@ -31,25 +34,28 @@ function ManageVideoCard(props) {
               Authorization: `bearer ${accesstoken}`,
             },
           }
-          );
-          props.setProgress(80)
-          props.setResponse(response.data.message);
-          props.setProgress(100)
-        }
-      } catch (error) {
-      props.setProgress(100)
+        );
+        props.setProgress(80);
+        props.setResponse(response.data.message);
+        props.setProgress(100);
+      }
+      setIsloading(0);
+    } catch (error) {
+      props.setProgress(100);
+      setIsloading(0);
       console.log(error);
     }
   };
   const handleOnPublish = async () => {
     try {
-      props.setProgress(10)
+      setIsloading(2);
+      props.setProgress(10);
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
-        ?.split("; ")
-        .find((row) => row.startsWith("accessToken="))
-        .split("=")[1];
-        props.setProgress(20)
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+        props.setProgress(20);
         const response = await axios.patch(
           `https://videotube-api.onrender.com/api/v1/videos/toggle/publish/${props.id}`,
           {},
@@ -59,26 +65,29 @@ function ManageVideoCard(props) {
               Authorization: `bearer ${accesstoken}`,
             },
           }
-          );
-          props.setProgress(80)
-          props.setResponse(response.data.message);
-          props.setProgress(100)
-        }
-      } catch (error) {
-      props.setProgress(100)
+        );
+        props.setProgress(80);
+        props.setResponse(response.data.message);
+        props.setProgress(100);
+      }
+      setIsloading(0);
+    } catch (error) {
+      props.setProgress(100);
+      setIsloading(0);
       console.log(error);
     }
   };
-  
+
   const handleSaveChanges = async () => {
     try {
-      props.setProgress(10)
+      setIsloading(3);
+      props.setProgress(10);
       if (document.cookie.length > 0) {
         const accesstoken = document.cookie
-        ?.split("; ")
-        .find((row) => row.startsWith("accessToken="))
-        .split("=")[1];
-        props.setProgress(20)
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+        props.setProgress(20);
         const response = await axios.patch(
           `https://videotube-api.onrender.com/api/v1/videos/${props.id}`,
           formdata,
@@ -88,14 +97,16 @@ function ManageVideoCard(props) {
               Authorization: `bearer ${accesstoken}`,
             },
           }
-          );
-          props.setProgress(80)
-          props.setResponse(response.data.message);
-          props.setProgress(100)
-          // console.log(formdata);
-        }
-      } catch (error) {
-      props.setProgress(100)
+        );
+        props.setProgress(80);
+        props.setResponse(response.data.message);
+        props.setProgress(100);
+        // console.log(formdata);
+      }
+      setIsloading(0);
+    } catch (error) {
+      props.setProgress(100);
+      setIsloading(0);
       console.log(error);
     }
   };
@@ -106,6 +117,7 @@ function ManageVideoCard(props) {
       setFormdata({
         ...formdata,
         [e.target.name]: file,
+        show:URL.createObjectURL(file),
       });
     } else {
       setFormdata({
@@ -115,8 +127,8 @@ function ManageVideoCard(props) {
     }
   };
   return (
-    <div className="bg-[#272727] text-white relative  rounded-lg md:rounded-2xl p-2 m-7 w-fit">
-      <div className="flex flex-col md:flex-row justify-evenly items-center p-1 md:p-9">
+    <div className="bg-[#181818] text-white relative  rounded-lg md:rounded-2xl p-2 m-2 w-full">
+      <div className="flex flex-col md:flex-row justify-evenly items-center p-1 md:p-2">
         <div>
           <div name="thumbnail" className="relative mt-1">
             <input
@@ -134,7 +146,7 @@ function ManageVideoCard(props) {
               <img
                 name="thumbnail"
                 className=" rounded-lg md:rounded-2xl w-[450px]"
-                src={props.thumbnail}
+                src={formdata.show}
                 alt="thumbnail"
               />
             </label>
@@ -142,39 +154,39 @@ function ManageVideoCard(props) {
         </div>
         <div className="flex flex-col ">
           <div className="my-1">
-            <label htmlFor="title" className=" font-bold">
-              Title :
+            <label htmlFor="title" className="block font-bold">
+              Video Title :
             </label>
             <input
               onChange={handleChange}
               type="text"
               value={formdata.title}
               name="title"
-              className="bg-transparent active:outline-none w-fit md:w-[600px] md:border-b ml-14 border-white "
+              className="bg-transparent w-fit md:w-[600px] outline:none focus:border-red-700 border-b border-gray-600  outline-none  transition-all duration-300 "
             />
           </div>
-          <div className="my-1">
-            <label htmlFor="description" className=" font-bold">
-              Description :
+          <div className="m">
+            <label htmlFor="description" className="block font-bold">
+             Video Description :
             </label>
             <input
               onChange={handleChange}
               type="text"
               name="description"
               value={formdata.description}
-              className="bg-transparent active:outline-none w-fit md:w-[600px] ml-2 md:border-b border-white "
+              className="bg-transparent w-fit md:w-[600px] outline:none focus:border-red-700 border-b border-gray-600  outline-none  transition-all duration-300 "
             />
           </div>
-          <div className="my-1 flex font-bold">
-            views :{" "}
-            <div className="bg-transparent font-normal active:outline-none w-fit md:w-[600px] ml-12 md:border-b border-white">
+          <div className="flex font-bold mt-7">
+            Views :{" "}
+            <div className="bg-transparent font-normal active:outline-none w-fit md:w-[600px] ml-2">
               {" "}
               {props.views}
             </div>
           </div>
-          <div className="my-1 flex font-bold">
+          <div className=" flex font-bold mb-4">
             Published :{" "}
-            <div className="bg-transparent font-normal active:outline-none w-fit md:w-[600px] ml-5 md:border-b border-white">
+            <div className="bg-transparent font-normal active:outline-none w-fit md:w-[600px] ml-2">
               {" "}
               {daysAgo} days ago
             </div>
@@ -182,24 +194,112 @@ function ManageVideoCard(props) {
         </div>
       </div>
       <div className="buttons flex flex-row md:absolute md:bottom-3  md:right-2 justify-center mb-3 md:mb-0 ">
-        <button
-          onClick={handleSaveChanges}
-          className="bg-green-700 font-semibold tracking-tighter mx-1 rounded-lg px-5 md:px-2 py-2"
-        >
-          Save <span className="hidden md:inline-block"> Changes</span>
-        </button>
-        <button
-          onClick={handleOnPublish}
-          className="bg-yellow-500  00 font-semibold tracking-tighter mx-1 rounded-lg px-5 md:px-2 py-2"
-        >
-          {props.isPublished ? "Unpublish" : "Publish"}
-        </button>
-        <button
-          onClick={handleDeletePermanently}
-          className="bg-red-700 font-semibold tracking-tighter mx-1 rounded-lg px-5 md:px-2 py-2"
-        >
-          Delete <span className="hidden md:inline-block"> Permanently</span>
-        </button>
+        <div>
+          {isloading === 3 ? (
+            <button
+              disabled
+              type="button"
+              class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
+            >
+              <svg
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="#1C64F2"
+                />
+              </svg>
+              Loading...
+            </button>
+          ) : (
+            <button
+              onClick={handleSaveChanges}
+              className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+            >
+              Save <span className="hidden md:inline-block"> Changes</span>
+            </button>
+          )}
+        </div>
+        <div>
+          {isloading === 2 ? (
+            <button
+              disabled
+              type="button"
+              class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
+            >
+              <svg
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="#1C64F2"
+                />
+              </svg>
+              Loading...
+            </button>
+          ) : (
+            <button
+              onClick={handleOnPublish}
+              className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+            >
+              {props.isPublished ? "Unpublish" : "Publish"}
+            </button>
+          )}
+        </div>
+        <div>
+          {isloading === 1 ? (
+            <button
+              disabled
+              type="button"
+              class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
+            >
+              <svg
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="#1C64F2"
+                />
+              </svg>
+              Loading...
+            </button>
+          ) : (
+            <button
+              onClick={handleDeletePermanently}
+              className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+            >
+              Delete{" "}
+              <span className="hidden md:inline-block"> Permanently</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
