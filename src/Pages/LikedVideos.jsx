@@ -2,9 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import VideoCardsecond from "../Helpers/VideoCard2";
 import VideoCard3 from "../Helpers/VideoCard3";
+import loader from "../Images/loader3.png";
 
 function LikedVideos({ isSidebarOpen, setProgress }) {
   const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const fetchLikedVideos = async () => {
     try {
       if (document.cookie.length > 0) {
@@ -21,7 +23,7 @@ function LikedVideos({ isSidebarOpen, setProgress }) {
           }
         );
         setVideos(response.data.data);
-        // console.log(response.data.data[0]);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -31,6 +33,13 @@ function LikedVideos({ isSidebarOpen, setProgress }) {
     fetchLikedVideos();
   }, []);
   return (
+    <>
+    {loading ? (
+      <div className=" left-64 top-14 relative overflow-hidden">
+        <img className=" opacity-10" src={loader} alt="" />
+        <div className="wipe-animation"></div>
+      </div>
+    ) : (
     <div
       className={` ${
         isSidebarOpen ? "md:pl-64 justify-items-end p-0" : "md:ml-24 p-0"
@@ -59,6 +68,8 @@ function LikedVideos({ isSidebarOpen, setProgress }) {
         </div>
       )}
     </div>
+     )}
+     </>
   );
 }
 

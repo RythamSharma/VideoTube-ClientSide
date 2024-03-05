@@ -81,6 +81,31 @@ function StreamVideo(props) {
       setTransaction(false);
     }
   };
+  const handleWatchLaterButton = async () => {
+    try {
+      setTransaction(true);
+      if (document.cookie.length > 0) {
+        const accesstoken = document.cookie
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+        const response = await axios.post(
+          `https://videotube-api.onrender.com/api/v1/watchlater/toggle/w/${videoId}`,
+          {},
+          {
+            headers: {
+              Authorization: `bearer ${accesstoken}`,
+            },
+          }
+        );
+        setTransaction(false);
+        setAlert(response.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+      setTransaction(false);
+    }
+  };
   const handleComment = async () => {
     try {
       setTransaction(true);
@@ -398,7 +423,7 @@ function StreamVideo(props) {
                       </button>
                     </div>
                     <div>
-                      <button className="bg-[#272727] flex px-3 p-2 rounded-full">
+                      <button onClick={handleWatchLaterButton} className="bg-[#272727] active:outline-double flex px-3 p-2 rounded-full">
                         <img
                           className="w-6 mr-0 md:mr-2"
                           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABFElEQVR4nO3YsS4EURSA4RuK1WqQSBQShVo8hsJTaDV6EoV4CS8gkVB4Aq1oUaDZiEpB2OrTbCKZIGOEOTPOV8+du/89M5lkS0kppZT+CSxgHbs4xRkmS2SYq/zoBx+bqi5szSchjzWXhw/RKCQa9WVItIkMSmS+dotDbJTovBviBNtYw2zpEmONF7YhQ3r9aEUjQ4KRE+nLRLQoQ7pAvuzB6MNEMNGXkKXOh2CAo8YhbXwrKvvPYxPX31kXIgSL2MFF0wOI8DLvYdTkAMLA1k8mGQauanaMSmR4rRlyWSLDXc2Q/RIZjmtE3GOmyc1/VWWvFTx/cfkQq01P6c9Cxvst4wA3eMETzsd/jU43ikgppdIVb4uQyed/dF8wAAAAAElFTkSuQmCC"
@@ -471,6 +496,13 @@ function StreamVideo(props) {
                 </div>
               </div>
             </div>
+            {alert ? (
+                  <div className="fixed bottom-4 z-20 left-4 bg-white text-black transition-all duration-100 ease-in-out px-7 md:px-9 py-2 md:py-3 rounded-xl">
+                    {alert}
+                  </div>
+                ) : (
+                  ""
+                )}
             {isModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75">
                 <div className="bg-[#272727] rounded-lg p-6 pt-1 max-w-md m-3 md:m-0 w-full">

@@ -6,6 +6,7 @@ import ChannelDashboard from "./ChannelDashboard";
 import YourChannel from "./YourChannel";
 import QueryVideoLayout from "../components/QueryVideoLayout";
 import LikedVideos from "./LikedVideos";
+import WatchLater from "./WatchLater";
 const Profile = ({ setProgress }) => {
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setSideBar] = useState(true);
@@ -61,7 +62,11 @@ const Profile = ({ setProgress }) => {
           setProgress={setProgress}
           isSidebarOpen={isSidebarOpen}
           />
-        ): null}
+        ): choice==="watchlater"?(
+          <WatchLater
+          setProgress={setProgress}
+          isSidebarOpen={isSidebarOpen}/>
+        ):(null)}
       </div>
     </div>
   );
