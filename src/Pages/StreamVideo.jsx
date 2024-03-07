@@ -6,15 +6,18 @@ import Navbar from "../components/global/Navbar";
 import VideoCard3 from "../Helpers/VideoCard3";
 import CommentCard from "../Helpers/CommentCard";
 import loader from "../Images/loader.png";
+import InfiniteScroll from "react-infinite-scroll-component";
 import "../App.css";
 function StreamVideo(props) {
   const { videoId, ownerId } = useParams();
   const [videoDetails, setVideoDetails] = useState({});
   const [ownerdetails, setOwnerDetails] = useState({});
+  const [hasmore, setHasmore] = useState(true);
   const [videoSource, setVideoSource] = useState("");
-  const [issub, setIssub] = useState(false);
+  const [page, setPage] = useState(2);
   const [videos, setVideos] = useState([]);
   const [comments, setComments] = useState([]);
+  const [subscribed, setSubscribed] = useState();
   const [transaction, setTransaction] = useState(false);
   const [search, setSearch] = useState("");
   const [choice, setChoice] = useState("home");
@@ -24,6 +27,33 @@ function StreamVideo(props) {
   const [alert, setAlert] = useState("");
   const [content, setContent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchMoreData = async () => {
+    setPage((prev)=>prev+1);
+    try {
+      if (document.cookie.length > 0) {
+        const accesstoken = document.cookie
+          ?.split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          .split("=")[1];
+        const response = await axios.get(
+          `https://videotube-api.onrender.com/api/v1/videos/?page=${page}`,
+          {
+            headers: {
+              Authorization: `bearer ${accesstoken}`,
+            },
+          }
+        );
+        setVideos((prev)=>prev.concat(response.data.data));
+        if (response.data.data.length < 9) {
+          setHasmore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -99,7 +129,7 @@ function StreamVideo(props) {
           }
         );
         setTransaction(false);
-        setAlert(response.data.message)
+        setAlert(response.data.message);
       }
     } catch (error) {
       console.log(error);
@@ -179,7 +209,7 @@ function StreamVideo(props) {
           },
         }
       );
-      setIssub(response.data.statusCode !== 200);
+      setSubscribed(response.data.statusCode !== 200);
       setTransaction(false);
       // console.log(response.data)
     }
@@ -225,6 +255,9 @@ function StreamVideo(props) {
           }
         );
         setVideos(response.data.data);
+        if (response.data.data.length < 9) {
+          setHasmore(false);
+        }
         // console.log(response.data.data);
       }
     } catch (error) {
@@ -247,8 +280,8 @@ function StreamVideo(props) {
             },
           }
         );
-        // console.log(response.data.data[0]);
-        setOwnerDetails(response.data.data[0]);
+        setSubscribed(response.data.data.Subscribed);
+        setOwnerDetails(response.data.data.ChannelStatsAndDetails[0]);
       }
     } catch (error) {
       console.log(error);
@@ -359,13 +392,14 @@ function StreamVideo(props) {
                         onClick={toggleSubscription}
                         disabled={transaction}
                         className={`${
-                          issub ? "bg-[#272727]" : "bg-white text-black"
+                          subscribed ? "bg-[#272727]" : "bg-white text-black"
                         } my-3 rounded-full py-2  px-4`}
                       >
-                        {issub ? "Subscribed" : "Subscribe"}
+                        {subscribed ? "Subscribed" : "Subscribe"}
                       </button>
                     </div>
                   </div>
+
                   <div className="flex flex-row items-center justify-around mt-3">
                     <div className="mr-2 flex ">
                       {liked ? (
@@ -414,16 +448,23 @@ function StreamVideo(props) {
                       </button>
                     </div>
                     <div className="mr-2">
-                      <button className="bg-[#272727] flex pr-4 py-2 md:px-3 md:p-2 rounded-full">
+                      <a
+                        href="video"
+                        download={`https://res.cloudinary.com/djkmwjfok/video/upload/${videoDetails.videoFileId}.mp4`}
+                        className="bg-[#272727] active:outline-double cursor-pointer flex pr-4 py-2 md:px-3 md:p-2 rounded-full"
+                      >
                         <img
                           className="w-6 mr-1"
                           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAl0lEQVR4nO2SawqDQAwGcworvWI9rth6mikLEeJaH9CNomZg0R9ZvzGJSBD8AYocBSGgxAgklvAoiCVU9mj1C6i3jiDVpjulwhvNeecSvwQ0PNUmmhICFdDqB3vgOScAPEztx9a6SGAE3MKXJAYB9/CZ+Q5P+z7Zk+Iw7oTF7883SOwXno2j0+Pb9pVOVHJZKMR5BYJb8AUh2BBbQ/uxeQAAAABJRU5ErkJggg=="
                         />
                         Download
-                      </button>
+                      </a>
                     </div>
                     <div>
-                      <button onClick={handleWatchLaterButton} className="bg-[#272727] active:outline-double flex px-3 p-2 rounded-full">
+                      <button
+                        onClick={handleWatchLaterButton}
+                        className="bg-[#272727] active:outline-double flex px-3 p-2 rounded-full"
+                      >
                         <img
                           className="w-6 mr-0 md:mr-2"
                           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABFElEQVR4nO3YsS4EURSA4RuK1WqQSBQShVo8hsJTaDV6EoV4CS8gkVB4Aq1oUaDZiEpB2OrTbCKZIGOEOTPOV8+du/89M5lkS0kppZT+CSxgHbs4xRkmS2SYq/zoBx+bqi5szSchjzWXhw/RKCQa9WVItIkMSmS+dotDbJTovBviBNtYw2zpEmONF7YhQ3r9aEUjQ4KRE+nLRLQoQ7pAvuzB6MNEMNGXkKXOh2CAo8YhbXwrKvvPYxPX31kXIgSL2MFF0wOI8DLvYdTkAMLA1k8mGQauanaMSmR4rRlyWSLDXc2Q/RIZjmtE3GOmyc1/VWWvFTx/cfkQq01P6c9Cxvst4wA3eMETzsd/jU43ikgppdIVb4uQyed/dF8wAAAAAElFTkSuQmCC"
@@ -497,12 +538,12 @@ function StreamVideo(props) {
               </div>
             </div>
             {alert ? (
-                  <div className="fixed bottom-4 z-20 left-4 bg-white text-black transition-all duration-100 ease-in-out px-7 md:px-9 py-2 md:py-3 rounded-xl">
-                    {alert}
-                  </div>
-                ) : (
-                  ""
-                )}
+              <div className="fixed bottom-4 z-20 left-4 bg-white text-black transition-all duration-100 ease-in-out px-7 md:px-9 py-2 md:py-3 rounded-xl">
+                {alert}
+              </div>
+            ) : (
+              ""
+            )}
             {isModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75">
                 <div className="bg-[#272727] rounded-lg p-6 pt-1 max-w-md m-3 md:m-0 w-full">
@@ -543,25 +584,32 @@ function StreamVideo(props) {
                 )}
               </div>
             )}
-            <div className="video-layout mt-4 md:mt-20 md:mr-20">
-              {videos.map((video) => (
-                <div className="md:ml-6 ml-2" key={video._id}>
-                  <VideoCard3
-                    key={video._id}
-                    id={video._id}
-                    thumbnail={video.thumbnail}
-                    description={video.description}
-                    title={video.title}
-                    owner={video.owner}
-                    duration={video.duration}
-                    views={video.views}
-                    username={video.ownerdetails.username}
-                    avatar={video.ownerdetails.avatar}
-                    createdAt={video.createdAt}
-                  />
-                </div>
-              ))}
-            </div>
+            <InfiniteScroll
+              dataLength={videos.length}
+              next={fetchMoreData}
+              hasMore={hasmore}
+              loader={<h4 className="text-black" >Loading...</h4>}
+            >
+              <div className="video-layout mt-4 md:mt-20 md:mr-20">
+                {videos.map((video) => (
+                  <div className="md:ml-6 ml-2" key={video._id}>
+                    <VideoCard3
+                      key={video._id}
+                      id={video._id}
+                      thumbnail={video.thumbnail}
+                      description={video.description}
+                      title={video.title}
+                      owner={video.owner}
+                      duration={video.duration}
+                      views={video.views}
+                      username={video.ownerdetails.username}
+                      avatar={video.ownerdetails.avatar}
+                      createdAt={video.createdAt}
+                    />
+                  </div>
+                ))}
+              </div>
+            </InfiniteScroll>
           </div>
         </div>
       ) : (
