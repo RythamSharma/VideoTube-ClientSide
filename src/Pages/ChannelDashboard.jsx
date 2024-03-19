@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import VideoCard from "../Helpers/VideoCard";
-function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
+function  ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
   const [channeldetails, setChanneldetails] = useState();
   const [issub, setIssub] = useState(false);
   const [videos, setVideos] = useState([]);
@@ -21,6 +21,7 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
   }
   const fetchChannelDetails = async () => {
     try {
+      console.log("in channel dashboard")
       const accesstoken = document.cookie
         ?.split("; ")
         .find((row) => row.startsWith("accessToken="))
@@ -43,9 +44,10 @@ function ChannelDashboard({ setProgress, channel, choice, isSidebarOpen }) {
             },
           }
         );
-        setIssub(resp.data.data.IsSubscribed);
         setProgress(70);
-        setChanneldetails(response.data.data[0]);
+        setChanneldetails(response.data.data.ChannelStatsAndDetails[0]);
+        setIssub(response.data.data.Subscribed);
+        // console.log(response.data.data.Subscribed);
         setProgress(100);
       }
     } catch (error) {
